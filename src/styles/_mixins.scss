@@ -1,0 +1,22 @@
+@use 'values' as *;
+
+@mixin button($color, $text-color: black, $hover-text-color:white) {
+  font-size: .8em;
+
+  border: $border $color;
+  border-radius: $rounded;
+  padding: .22em .7em;
+
+  box-sizing: content-box;
+
+  color: $text-color;
+
+  transition: $transition;
+
+  cursor: pointer;
+
+  &:hover {
+    background: $color;
+    color: $hover-text-color;
+  }
+}
