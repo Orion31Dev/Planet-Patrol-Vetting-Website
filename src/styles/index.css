@@ -1,0 +1,19 @@
+@font-face {
+  font-family: Rubik;
+  src: url('../fonts/Rubik.ttf') format('ttf supports variations'), url('../fonts/Rubik.ttf') format('ttf-variations');
+  font-weight: 100 1000;
+}
+
+body,
+input {
+  margin: 0;
+  font-family: Rubik, sans-serif;
+  font-size: 1vw;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

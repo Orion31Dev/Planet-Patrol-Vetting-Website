@@ -3,6 +3,12 @@
 
 * {
   transition: $transition;
+  transition-property: color, background-color; // Overwrite 'all' in $transition
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .header {
@@ -15,11 +21,11 @@
 
   padding: 2vmin $horizontal-margin;
 
-  border-bottom: 0.1vmin solid #ccc;
+  border-bottom: 0.15vmin solid $light-gray;
 
   .title {
     font-size: 1.2em;
-    font-weight: $bold;
+    font-weight: $font-title;
   }
 
   .login {
@@ -30,23 +36,23 @@
   }
 }
 
-.search {
+.section {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 
+  margin: 3vmin $horizontal-margin;
+  font-size: 2.2em;
+}
 
-  margin: 5vmin $horizontal-margin;
-  font-size: 5vmin;
-
-
-  .section-title {
-    margin-left: -2em;
+.search {
+  .title {
     font-size: 1em;
   }
 
   .input-wrapper {
-    margin-left: .5em;
+    margin-left: 0.5em;
 
     input {
       outline: none;
@@ -56,17 +62,16 @@
 
       width: 5em;
 
-
       text-align: left;
 
-      font-weight: $bold;
+      font-weight: $font-title;
 
       border-bottom: 0.4vmin solid $gray;
       transition: $transition;
 
       &:focus {
         border-color: black;
-        
+
         ~ .label {
           color: black;
         }
@@ -74,14 +79,105 @@
     }
 
     .label {
-      font-size: .4em;
+      font-size: 0.4em;
       position: absolute;
       color: $gray;
     }
   }
 
   .btn-search {
-    margin-left: .5em;
+    margin-left: 0.5em;
     @include button($accent-blue);
+  }
+}
+
+.tic {
+  font-size: 1em;
+
+  .tic-info {
+    .title {
+      font-weight: $font-thin;
+      font-size: 1.5em;
+      margin: 0 0 3vmin;
+
+      .id {
+        font-weight: $font-title;
+        display: inline-block;
+      }
+    }
+
+    .stats {
+      display: block;
+      width: 100%;
+      text-align: center;
+
+      .stat {
+        font-size: 1.25em;
+        display: inline-block;
+        flex-direction: column;
+        font-weight: $font-light;
+
+        margin: 1vmin 2vmin;
+
+        &.up {
+          margin: 0 inherit;
+        }
+
+        .label {
+          line-height: 1.2em;
+          font-size: 0.4em;
+          font-weight: $font-light;
+
+          span {
+            font-weight: $font-thin;
+            color: $gray;
+          }
+        }
+
+        img {
+          width: 20vmin;
+          height: 20vmin;
+
+          margin-bottom: 2vh;
+        }
+      }
+    }
+
+    .dispositions {
+      margin-top: 8vmin;
+      width: 70%;
+
+      .title {
+        font-size: .5em;
+        margin: .5vmin 0;
+      }
+
+      table {
+        width: 100%;
+        font-size: .75em;
+        border-collapse: collapse;
+
+        tr {
+          margin: 0;
+
+          td, th {
+            text-align: left;
+            padding: .8vmin 3.5vmin;
+          }
+
+          th {
+            font-weight: $font-light;
+          }
+
+          &:nth-child(odd) {
+            background-color: $light-gray;
+          }
+
+          &.headers {
+            background-color: $accent-light-blue;
+          }
+        }
+      }
+    }
   }
 }

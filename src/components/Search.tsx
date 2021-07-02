@@ -5,7 +5,7 @@ function Header() {
 
   return (
     <div className="search section">
-      <div className="section-title">Find a Target</div>
+      <div className="title">Find a Target</div>
       <div className="input-wrapper">
         <input
           type="text"
@@ -17,13 +17,19 @@ function Header() {
         />
         <div className="label">TIC ID</div>
       </div>
-      <div className="btn-search">Find</div>
+      <div className="btn-search" onClick={() => goTo(idVal)}>
+        Find
+      </div>
     </div>
   );
 }
 
 function validate(str: string) {
   return str.replace(/\D/g, '');
+}
+
+function goTo(id: string) {
+  window.location.href = `/tic/${id}`;
 }
 
 export default Header;

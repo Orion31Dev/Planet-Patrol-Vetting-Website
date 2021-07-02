@@ -1,13 +1,18 @@
 import React from 'react';
 import './styles/style.scss';
-import Header from './components/Header';
-import Search from './components/Search';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './routes/Home';
+import TIC from './routes/TIC';
 
 function App() {
   return (
     <div className="app">
-      <Header />
-      <Search />
+      <Router>
+        <Switch>
+          <Route path="/tic/:ticId" component={TIC} />
+          <Route path="/" component={Home} />
+        </Switch>
+      </Router>
     </div>
   );
 }
