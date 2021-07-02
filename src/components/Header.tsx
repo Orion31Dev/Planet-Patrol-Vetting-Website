@@ -1,10 +1,10 @@
 import React from 'react';
 
-function Header() {
+function Header({hideLoginBtn = false }: { hideLoginBtn?: boolean }) {
   return (
     <div className="header">
       <a href="/"><div className="title">Planet Patrol</div></a>
-      <div className="login">Log In</div>
+      {!hideLoginBtn && <div className="login">Log In</div>}
     </div>
   );
 }
