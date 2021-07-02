@@ -3,6 +3,7 @@ import './styles/style.scss';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './routes/Home';
 import TIC from './routes/TIC';
+import Profile from './routes/Profile';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/tic/:ticId" component={TIC} />
+          <Route path="/profile" component={Profile} />
           <Route path="/" component={Home} />
         </Switch>
       </Router>
