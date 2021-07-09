@@ -1,11 +1,11 @@
 @use 'values' as *;
 
-@mixin button($color, $text-color: black, $hover-text-color:white) {
-  font-size: .8em;
+@mixin button($color, $text-color: black, $hover-text-color: white) {
+  font-size: 0.8em;
 
   border: $border $color;
   border-radius: $rounded;
-  padding: .22em .7em;
+  padding: 0.22em 0.7em;
 
   box-sizing: content-box;
 
@@ -18,5 +18,31 @@
   &:hover {
     background: $color;
     color: $hover-text-color;
+  }
+}
+
+@mixin input {
+  outline: none;
+  border: none;
+
+  font-size: 1em;
+
+  text-align: left;
+
+  font-weight: $font-title;
+
+  color: $dark-gray;
+  border-bottom: 0.4vmin solid $gray;
+  transition: $transition;
+
+  background: transparent;
+
+  &:focus {
+    color: black;
+    border-color: black;
+
+    ~ .label {
+      color: black;
+    }
   }
 }

@@ -47,6 +47,18 @@ a {
   font-size: 2.2em;
 }
 
+.input-wrapper {
+  input {
+    @include input;
+  }
+
+  .label {
+    font-size: 0.5em;
+    position: absolute;
+    color: $gray;
+  }
+}
+
 .search {
   .title {
     font-size: 1em;
@@ -56,33 +68,7 @@ a {
     margin-left: 0.5em;
 
     input {
-      outline: none;
-      border: none;
-
-      font-size: 1em;
-
       width: 5em;
-
-      text-align: left;
-
-      font-weight: $font-title;
-
-      border-bottom: 0.4vmin solid $gray;
-      transition: $transition;
-
-      &:focus {
-        border-color: black;
-
-        ~ .label {
-          color: black;
-        }
-      }
-    }
-
-    .label {
-      font-size: 0.4em;
-      position: absolute;
-      color: $gray;
     }
   }
 
@@ -145,7 +131,7 @@ a {
     }
 
     .dispositions {
-      margin-top: 8vmin;
+      margin-top: 4vmin;
       width: 70%;
 
       .title {
@@ -182,10 +168,32 @@ a {
       }
     }
   }
+
+  .user-input {
+    text-align: center;
+    font-size: 2em;
+
+    position: relative;
+
+    flex-wrap: wrap;
+
+    select {
+      @include input;
+      outline: none;
+      font-size: 1em;
+      margin: 2vmin;
+
+      padding: 0 1vmin;
+    }
+
+    .button {
+      @include button($accent-blue);
+      margin-left: 1vmin;
+    }
+  }
 }
 
 .profile {
-
   .title {
     font-weight: $font-title;
     text-align: center;
@@ -196,7 +204,7 @@ a {
 
   .need-attention {
     margin-top: 0;
-    
+
     .title {
       line-height: 0;
 
@@ -212,7 +220,7 @@ a {
     }
 
     .tic-link {
-      font-size: .8em;
+      font-size: 0.8em;
       border: $border black;
       border-radius: $rounded;
       padding: 1vmin 2vmin;
