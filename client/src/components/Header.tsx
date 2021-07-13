@@ -1,4 +1,6 @@
 import React from 'react';
+import GoogleLogin from 'react-google-login';
+import { handleLogin } from '../GoogleAuth';
 
 function Header({ hideLoginBtn = false }: { hideLoginBtn?: boolean }) {
   return (
@@ -11,6 +13,13 @@ function Header({ hideLoginBtn = false }: { hideLoginBtn?: boolean }) {
           Log In
         </div>
       )}
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+        buttonText={'Log in with Google'}
+        cookiePolicy={'single_host_origin'}
+        onSuccess={handleLogin}
+        onFailure={handleLogin}
+      />
     </div>
   );
 }
