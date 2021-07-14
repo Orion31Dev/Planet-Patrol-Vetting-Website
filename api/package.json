@@ -1,7 +1,7 @@
 {
   "name": "planet-patrol-website-api",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "./index.ts",
   "repository": "https://github.com/Orion31Dev/Planet-Patrol-Vetting-Website",
   "author": "Ryan Salik",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@types/node": "^16.3.1",
-    "@types/express": "^4.17.13"
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.3.1"
   }
 }
