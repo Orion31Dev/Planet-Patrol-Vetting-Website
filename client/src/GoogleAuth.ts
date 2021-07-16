@@ -1,5 +1,8 @@
 export async function handleLogin(googleData: any) {
-  const res = await fetch('/api/v1/auth/google', {
+
+  console.log(googleData.tokenId);
+
+  const res = await fetch('/api/auth/google', {
     method: 'POST',
     body: JSON.stringify({
       token: googleData.tokenId,

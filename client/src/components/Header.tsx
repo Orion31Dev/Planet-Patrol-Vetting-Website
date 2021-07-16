@@ -24,6 +24,7 @@ function Header({ hideLoginBtn = false }: { hideLoginBtn?: boolean }) {
 }
 
 function renderGoogleButton(renderProps: any) {
+  if (renderProps.disabled) return <div />;
   return (
     <div className="login" onClick={renderProps.onClick}>
       Log In
