@@ -105,7 +105,7 @@ a {
         flex-direction: column;
         font-weight: $font-light;
 
-        margin: 1vmin 2vmin;
+        margin: 1vmin 1vw;
 
         &.up {
           margin: 0 inherit;
@@ -231,5 +231,24 @@ a {
         background: black;
       }
     }
+  }
+}
+
+.msg404 {
+  text-align: center;
+  margin-top: 10vmax;
+
+  font-size: .6vw;
+
+  .title {
+    font-weight: $font-title;
+    font-size: 35em;
+    width: 100%;
+
+    line-height: 80%;
+  }
+
+  .subtitle {
+    font-size: 5em;
   }
 }

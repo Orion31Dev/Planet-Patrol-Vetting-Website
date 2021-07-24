@@ -48,7 +48,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(session(sess));
 
 // Middleware to automatically set req.user property if the user already logged in
-app.use(async (req: any, res: any, next: Function) => {
+app.use(async (req: any, _res: any, next: Function) => {
   if (req.session.userId) {
     try {
       req.user = await db.get(req.session.userId);
@@ -107,6 +107,45 @@ app.get('/api/me', async (req: any, res: any) => {
   }
 
   res.json(req.user);
+});
+
+// User submits or updates disposition
+app.post('/api/submit/:ticId', async (req: any, res: any) => {
+  if (req.user) {
+    const { disposition, comments } = req.body;
+
+    if (!disposition || !comments) {
+      res.status(400);
+      res.json({ message: 'Malformed request.' });
+      return;
+    }
+
+    try {
+      let fileId = 'tic:' + req.params.ticId;
+      let file = await db.get(fileId);
+
+      file.dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+
+      db.insert(file);
+    } catch {
+      res.status(400);
+      res.json({ message: 'The request TIC could not be found.' });
+    }
+  } else {
+    res.status(401);
+    res.json({ message: 'You are not signed in.' });
+  }
+});
+
+app.get('/api/tic/:ticId', async (req: any, res: any) => {
+  try {
+    const tic = await db.get('tic:' + req.params.ticId);
+    res.json(tic);
+    res.status(200);
+  } catch {
+    res.status(404);
+    res.json({ message: 'The request TIC could not be found.' });
+  }
 });
 
 app.get('/*', (_req: any, res: any) => {

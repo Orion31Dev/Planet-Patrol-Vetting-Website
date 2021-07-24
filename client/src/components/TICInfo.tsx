@@ -1,6 +1,26 @@
 import React from 'react';
 
-function TICInfo(props: { id: any }) {
+export type TicData = {
+  epoch: number;
+  period: number;
+  duration: number;
+  depth: number;
+  depthPercent: number;
+  sectors: string;
+  rTranister: number;
+  rStar: number;
+  tmag: number;
+  deltaTmag: number;
+  dispositions: Disposition[];
+};
+
+export type Disposition = {
+  name: string;
+  disposition: string;
+  comments: string;
+};
+
+function TicInfo(props: { id: any; data: TicData }) {
   return (
     <div className="tic-info section">
       <div className="title">
@@ -11,60 +31,60 @@ function TICInfo(props: { id: any }) {
           <div className="label">
             Epoch <span>[BJD]</span>
           </div>
-          <div className="num">2458518.203</div>
+          <div className="num">{props.data.epoch}</div>
         </div>
         <div className="stat">
           <div className="label">
             Period <span>[Days]</span>
           </div>
-          <div className="num">1.651142</div>
+          <div className="num">{props.data.period}</div>
         </div>
         <div className="stat">
           <div className="label">
             Duration <span>[Hours]</span>
           </div>
-          <div className="num">0.76</div>
+          <div className="num">{props.data.duration?.toFixed(2)}</div>
         </div>
         <div className="stat">
           <div className="label">
             Depth <span>[ppm]</span>
           </div>
-          <div className="num">3007</div>
+          <div className="num">{props.data.depth}</div>
         </div>
         <div className="stat">
           <div className="label">
             Depth <span>[%]</span>
           </div>
-          <div className="num">0.30</div>
+          <div className="num">{props.data.depthPercent?.toFixed(2)}</div>
         </div>
       </div>
       <div className="stats">
         <div className="stat">
           <div className="label">Sector(s)</div>
-          <div className="num">8</div>
+          <div className="num">{props.data.sectors}</div>
         </div>
         <div className="stat">
           <div className="label">
             RStar <span>[RSun]</span>
           </div>
-          <div className="num">0.98</div>
+          <div className="num">{props.data.rStar?.toFixed(2)}</div>
         </div>
         <div className="stat">
           <div className="label">
-            RTransitor <span>[RJupiter]</span>
+            RTranister <span>[RJupiter]</span>
           </div>
-          <div className="num">0.49</div>
+          <div className="num">{props.data.rTranister?.toFixed(2)}</div>
         </div>
         <div className="stat">
           <div className="label">Tmag</div>
-          <div className="num">10.6701</div>
+          <div className="num">{props.data.tmag}</div>
         </div>
         <div className="stat up">
           <div className="label">
             Delta Tmag <br />
-            <span>[Nearby Sources]</span>
+            <span>Nearby Sources</span>
           </div>
-          <div className="num">6.30</div>
+          <div className="num">{props.data.deltaTmag?.toFixed(2)}</div>
         </div>
       </div>
       <div className="dispositions">
@@ -76,16 +96,7 @@ function TICInfo(props: { id: any }) {
               <th>Disposition</th>
               <th>Comments</th>
             </tr>
-            <tr>
-              <td>Veselin Kostov</td>
-              <td>PC</td>
-              <td>pVshape</td>
-            </tr>
-            <tr>
-              <td>Ryan Salik</td>
-              <td>FP</td>
-              <td>CO, low SNR, pSS</td>
-            </tr>
+            {generateDispositions(props.data.dispositions)}
           </tbody>
         </table>
       </div>
@@ -93,4 +104,19 @@ function TICInfo(props: { id: any }) {
   );
 }
 
-export default TICInfo;
+function generateDispositions(dispositions: Disposition[]) {
+  if (!dispositions) return [];
+  
+  let key = 0;
+  return dispositions.map((d) => {
+    return (
+      <tr key={key++}>
+        <td>{d.name}</td>
+        <td>{d.disposition}</td>
+        <td>{d.comments}</td>
+      </tr>
+    );
+  });
+}
+
+export default TicInfo;
