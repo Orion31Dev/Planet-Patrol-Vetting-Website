@@ -114,7 +114,9 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
   if (req.user) {
     const { disposition, comments } = req.body;
 
-    if (!disposition || !comments) {
+    console.log(disposition + " " + comments);  
+
+    if (!disposition) {
       res.status(400);
       res.json({ message: 'Malformed request.' });
       return;
@@ -124,10 +126,13 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
       let fileId = 'tic:' + req.params.ticId;
       let file = await db.get(fileId);
 
-      file.dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+      console.log(file);
+
+      if (file.dispositions) file.dispositions[req.session.userId] = { disposition: disposition, comments: comments };
 
       db.insert(file);
-    } catch {
+    } catch (e) {
+      console.log(e);
       res.status(400);
       res.json({ message: 'The request TIC could not be found.' });
     }

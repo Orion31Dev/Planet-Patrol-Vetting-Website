@@ -234,11 +234,69 @@ a {
   }
 }
 
+.dict-page {
+  .dictionary {
+    .title {
+      width: 100%;
+      text-align: center;
+
+      margin: 2vmin 0 2vmin;
+      font-weight: $font-title;
+    }
+
+    .basis-100 {
+      flex-basis: 100%;
+      text-align: center;
+      margin-bottom: 4vmin;
+
+      .input-wrapper {
+        font-size: .8em;
+        position: relative;
+        display: inline;
+        text-align: center;
+
+        .label {
+          left: 0;
+        }
+
+        input {
+          font-weight: $font-thin;
+        }
+      }
+    }
+
+    .term {
+      font-size: 1em;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-wrap: wrap;
+
+      font-weight: $font-light;
+
+      width: 8em;
+      height: 3.5em;
+      padding: 3vmin;
+      margin: 1vmin;
+
+      border-radius: 1.5vmin;
+      box-shadow: 0.3vmin 0.3vmin 0.5vmin 0.15vmin rgba(0, 0, 0, 0.3);
+
+      .definition {
+        font-weight: $font-thin;
+        font-size: 0.5em;
+        text-align: center;
+        width: 100%;
+      }
+    }
+  }
+}
+
 .msg404 {
   text-align: center;
   margin-top: 10vmax;
 
-  font-size: .6vw;
+  font-size: 0.6vw;
 
   .title {
     font-weight: $font-title;

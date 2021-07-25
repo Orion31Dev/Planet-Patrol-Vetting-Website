@@ -29,7 +29,7 @@ function Tic() {
     <div className="tic">
       <Header />
       <TicInfo id={ticId} data={ticData} />
-      <TicInput />
+      <TicInput id={ticId} />
     </div>
   );
 }
