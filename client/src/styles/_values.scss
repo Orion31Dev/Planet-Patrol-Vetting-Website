@@ -1,9 +1,14 @@
 // Colors
-$accent-blue: #038de9;
-$accent-light-blue: #51adeb;
-$gray: #898989;
-$dark-gray: #494949;
-$light-gray: #ddd;
+$accent-blue: rgb(44, 72, 235);
+$accent-dark-blue: #3117a3;
+
+$bkg-color: rgb(23, 23, 26);
+$darkest-gray: rgb(26, 26, 32);
+$dark-gray: #3b3a41;
+$gray: #848492;
+$light-gray: #b8b8c5;
+$blue-gray: #8484ac;
+$off-white: #eee;
 
 // Font Weights
 $font-title: 550;
@@ -13,9 +18,9 @@ $font-thin: 300;
 
 $rounded: 10vmin;
 
-$border: .15em solid;
+$border: .1em solid;
 $light-border: .05em solid $gray;
 
-$transition: .2s all ease;
+$transition: .2s ease;
 
 $horizontal-margin: 20vmin;

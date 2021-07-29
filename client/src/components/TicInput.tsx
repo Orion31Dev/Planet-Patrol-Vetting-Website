@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-export default function TicInput(props: { id: any }) {
+export default function TicInput(props: { id: any, updateFunction: Function }) {
   let [disposition, setDisposition] = useState('FP');
   let [comments, setComments] = useState('');
 
@@ -15,14 +15,15 @@ export default function TicInput(props: { id: any }) {
         <input type="text" onChange={(e) => setComments(e.target.value)} value={comments} />
         <div className="label">Comments</div>
       </div>
-      <div className="button" onClick={() => submitData(props.id, disposition, comments)}>
+      <div className="button" onClick={() => submitData(props.id, disposition, comments, props.updateFunction)}>
         Submit
       </div>
     </div>
   );
 }
 
-function submitData(ticId: any, disposition: string, comments: string) {
+function submitData(ticId: any, disposition: string, comments: string, updateFunction: Function) {
+  console.log("ehehe");
   fetch('/api/submit/' + ticId, {
     method: 'POST',
     body: JSON.stringify({
@@ -32,5 +33,8 @@ function submitData(ticId: any, disposition: string, comments: string) {
     headers: {
       'Content-Type': 'application/json',
     },
+  }).then(res => {
+    console.log(res);
+    if (res.status === 200) updateFunction();
   });
 }

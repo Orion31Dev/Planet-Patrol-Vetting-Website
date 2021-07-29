@@ -1,9 +1,29 @@
 @use 'values' as *;
 @use 'mixins' as *;
 
-* {
-  transition: $transition;
-  transition-property: color, background-color; // Overwrite 'all' in $transition
+body {
+  background: $bkg-color;
+}
+
+::-webkit-scrollbar {
+  width: 0.35vw;
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $dark-gray;
+
+  &:hover {
+    background-color: $gray;
+  }
+}
+
+*:not(body) {
+  transition: color $transition, background-color $transition;
+  color: $off-white;
 }
 
 a {
@@ -17,15 +37,31 @@ a {
   display: flex;
   align-items: center;
 
-  font-size: 2.5em;
+  font-size: 2em;
 
   padding: 2vmin $horizontal-margin;
 
-  border-bottom: 0.15vmin solid $light-gray;
+  border-bottom: 0.15vmin solid $dark-gray;
 
   .title {
-    font-size: 1.2em;
     font-weight: $font-title;
+  }
+
+  .links {
+    margin: 0 2vmin;
+
+    .sep {
+      display: inline;
+      margin: 0 1vmin;
+      color: $light-gray;
+    }
+
+    a {
+      color: $gray;
+      &:hover {
+        color: $off-white;
+      }
+    }
   }
 
   .login {
@@ -118,7 +154,7 @@ a {
 
           span {
             font-weight: $font-thin;
-            color: $gray;
+            color: $blue-gray;
           }
         }
 
@@ -159,11 +195,11 @@ a {
           }
 
           &:nth-child(odd) {
-            background-color: $light-gray;
+            background-color: $dark-gray;
           }
 
           &.headers {
-            background-color: $accent-light-blue;
+            background-color: $accent-dark-blue;
           }
         }
       }
@@ -180,11 +216,14 @@ a {
 
     select {
       @include input;
+
       outline: none;
       font-size: 1em;
       margin: 2vmin;
 
       padding: 0 1vmin;
+
+      background: $bkg-color;
     }
 
     .button {
@@ -198,9 +237,22 @@ a {
   .title {
     font-weight: $font-title;
     text-align: center;
-    font-size: 3em;
-    margin-top: 2vmin;
+    font-size: 1.5em;
+    margin-top: 1vmin;
     margin-bottom: 0;
+
+    flex-basis: 100%;
+  }
+
+  .email {
+    flex-basis: 100%;
+    text-align: center;
+    font-size: .7em;
+  }
+
+  .button {
+    @include button($accent-blue);
+    margin-top: 2vmin;
   }
 
   .need-attention {
@@ -227,7 +279,7 @@ a {
       padding: 1vmin 2vmin;
 
       &:hover {
-        color: white;
+        color: $off-white;
         background: black;
       }
     }
@@ -250,7 +302,7 @@ a {
       margin-bottom: 4vmin;
 
       .input-wrapper {
-        font-size: .8em;
+        font-size: 0.8em;
         position: relative;
         display: inline;
         text-align: center;
@@ -278,6 +330,8 @@ a {
       height: 3.5em;
       padding: 3vmin;
       margin: 1vmin;
+
+      background: $darkest-gray;
 
       border-radius: 1.5vmin;
       box-shadow: 0.3vmin 0.3vmin 0.5vmin 0.15vmin rgba(0, 0, 0, 0.3);

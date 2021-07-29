@@ -1,6 +1,6 @@
 @use 'values' as *;
 
-@mixin button($color, $text-color: black, $hover-text-color: white) {
+@mixin button($color, $text-color: $off-white, $hover-text-color: $bkg-color) {
   font-size: 0.8em;
 
   border: $border $color;
@@ -31,18 +31,22 @@
 
   font-weight: $font-title;
 
-  color: $dark-gray;
+  color: $gray;
   border-bottom: 0.4vmin solid $gray;
   transition: $transition;
 
   background: transparent;
 
   &:focus {
-    color: black;
-    border-color: black;
+    color: $off-white;
+    border-color: $off-white;
 
     ~ .label {
-      color: black;
+      color: $off-white;
     }
+  }
+
+  &::placeholder {
+    color: $dark-gray;
   }
 }

@@ -67,7 +67,7 @@ app.post('/api/auth/google', async (req: any, res: any) => {
     audience: process.env.CLIENT_ID,
   });
 
-  const { email } = ticket.getPayload();
+  const { email, name } = ticket.getPayload();
 
   let userId = 'user:' + email;
 
@@ -78,14 +78,14 @@ app.post('/api/auth/google', async (req: any, res: any) => {
     user = await db.get(userId);
   } catch {
     // User not found, create the user
-    user = { _id: userId };
+    user = { _id: userId, name: name };
     db.insert(user);
   }
 
   // Save userId for later API calls
   req.session.userId = userId;
 
-  res.status(201);
+  res.status(200);
   res.json(user);
 });
 
@@ -114,8 +114,6 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
   if (req.user) {
     const { disposition, comments } = req.body;
 
-    console.log(disposition + " " + comments);  
-
     if (!disposition) {
       res.status(400);
       res.json({ message: 'Malformed request.' });
@@ -126,13 +124,17 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
       let fileId = 'tic:' + req.params.ticId;
       let file = await db.get(fileId);
 
-      console.log(file);
-
       if (file.dispositions) file.dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+      else {
+        let dispositions: { [key: string]: any } = {};
+        dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+        file.dispositions = dispositions;
+      }
 
       db.insert(file);
+      res.status(200);
+      res.json({ message: 'Success' });
     } catch (e) {
-      console.log(e);
       res.status(400);
       res.json({ message: 'The request TIC could not be found.' });
     }
@@ -145,6 +147,23 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
 app.get('/api/tic/:ticId', async (req: any, res: any) => {
   try {
     const tic = await db.get('tic:' + req.params.ticId);
+
+    let dispositionsRealName: {}[] = [];
+
+    await asyncForEach(Object.keys(tic.dispositions), async (key: string) => {
+      let name = '';
+      try {
+        const nameDoc = await db.get(key);
+        name = nameDoc.name;
+      } catch {
+        return;
+      }
+
+      dispositionsRealName.push({ disposition: tic.dispositions[key].disposition, comments: tic.dispositions[key].comments, name: name });
+    });
+
+    tic.dispositions = dispositionsRealName;
+
     res.json(tic);
     res.status(200);
   } catch {
@@ -158,3 +177,9 @@ app.get('/*', (_req: any, res: any) => {
 });
 
 app.listen(port);
+
+async function asyncForEach(array: any[], callback: Function) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}

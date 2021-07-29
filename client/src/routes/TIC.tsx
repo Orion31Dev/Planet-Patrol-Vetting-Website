@@ -11,6 +11,7 @@ const emptyTICData = {} as TicData;
 function Tic() {
   let { ticId }: any = useParams();
   let [is404, setIs404] = useState(false);
+  let [isLoggedIn, setIsLoggedIn] = useState(false);
   let [ticData, setTicData] = useState(emptyTICData);
 
   useEffect(() => {
@@ -19,17 +20,17 @@ function Tic() {
 
   if (is404)
     return (
-      <div className="tic">
+      <div>
         <Header />
-        <Message404 />
+        <Message404 />;
       </div>
     );
 
   return (
     <div className="tic">
-      <Header />
+      <Header loggedInCallback={() => setIsLoggedIn(true)} />
       <TicInfo id={ticId} data={ticData} />
-      <TicInput id={ticId} />
+      {isLoggedIn && <TicInput id={ticId} updateFunction={() => getTicData(ticId, setIs404, setTicData)} />}
     </div>
   );
 }
@@ -39,7 +40,11 @@ function getTicData(ticId: string, setIs404: Function, setTicData: Function) {
     method: 'GET',
   }).then((res) => {
     if (res.status === 404) setIs404(true);
-    else res.json().then((data) => setTicData(data as TicData));
+    else
+      res.json().then((data) => {
+        setTicData(data as TicData);
+        console.log(data);
+      });
   });
 }
 

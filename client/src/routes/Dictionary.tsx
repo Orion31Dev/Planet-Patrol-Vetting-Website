@@ -4,12 +4,12 @@ import Header from '../components/Header';
 
 const definitions = [
   { name: 'LCMOD', def: 'Light Curve Modulation' },
-  { name: '(p)SS', def: '(potential) Significant Secondary eclipse' },
-  { name: '(p)FP', def: '(potential) False Positive' },
-  { name: 'CP', def: 'confirmed planet' },
-  { name: 'PC', def: 'planet candidate' },
-  { name: '(p)CO', def: '(potential) Centroid Offset' },
-  { name: '(p)Vshape', def: '(potential) V-shaped transit' },
+  { name: '(p)SS', def: '(P otential) Significant Secondary eclipse' },
+  { name: '(p)FP', def: '(Potential) False Positive' },
+  { name: 'CP', def: 'Confirmed _lanet' },
+  { name: 'PC', def: 'Planet Candidate' },
+  { name: '(p)CO', def: '(Potential) Centroid Offset' },
+  { name: '(p)Vshape', def: '(Potential) V-shaped transit' },
   { name: 'Low SNR', def: 'Low Signal-to-Noise Ratio' },
   { name: '(p)TD', def: '(potentially) Too Deep, i.e. transit depth suggest a stellar companion instead of a planetary companion' },
   { name: 'ppm', def: 'Parts per Million' },
@@ -52,7 +52,7 @@ export default function Dictionary() {
         <div className="title">Definitions and Abbreviations</div>
         <div className="basis-100">
           <div className="input-wrapper">
-            <input type="text" className="id-search" value={sVal} maxLength={7} onChange={(e) => setSVal(e.target.value)} />
+            <input type="text" className="id-search" placeholder={"SNR"} value={sVal} maxLength={7} onChange={(e) => setSVal(e.target.value)} />
             <div className="label">Search</div>
           </div>
         </div>
