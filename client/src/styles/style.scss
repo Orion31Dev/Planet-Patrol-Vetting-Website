@@ -204,6 +204,13 @@ a {
         }
       }
     }
+
+    .pdfs {
+      .title {
+        font-size: 0.5em;
+        margin: 0.5vmin 0;
+      }
+    }
   }
 
   .user-input {
@@ -238,7 +245,6 @@ a {
     font-weight: $font-title;
     text-align: center;
     font-size: 1.5em;
-    margin-top: 1vmin;
     margin-bottom: 0;
 
     flex-basis: 100%;
@@ -247,16 +253,17 @@ a {
   .email {
     flex-basis: 100%;
     text-align: center;
-    font-size: .7em;
+    font-size: 0.7em;
   }
 
   .button {
     @include button($accent-blue);
-    margin-top: 2vmin;
+    margin: 2vmin 0;
   }
 
   .need-attention {
-    margin-top: 0;
+    margin-top: 2vmin;
+    flex-basis: 100%;
 
     .title {
       line-height: 0;
@@ -270,18 +277,14 @@ a {
 
     .tics {
       margin-top: 2vmin;
+      text-align: center;
     }
 
     .tic-link {
+      @include button($blue-gray);
       font-size: 0.8em;
-      border: $border black;
-      border-radius: $rounded;
-      padding: 1vmin 2vmin;
 
-      &:hover {
-        color: $off-white;
-        background: black;
-      }
+      margin: 0 0.75vmin;
     }
   }
 }

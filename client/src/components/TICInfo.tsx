@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export type TicData = {
   epoch: number;
@@ -21,6 +21,12 @@ export type Disposition = {
 };
 
 function TicInfo(props: { id: any; data: TicData }) {
+  let [pdfs, setPDFs]: [any[], Function] = useState([]);
+
+  useEffect(() => {
+    getPDFs(props.id, setPDFs);
+  }, [props.id]);
+
   return (
     <div className="tic-info section">
       <div className="title">
@@ -87,6 +93,12 @@ function TicInfo(props: { id: any; data: TicData }) {
           <div className="num">{props.data.deltaTmag?.toFixed(2)}</div>
         </div>
       </div>
+      <div className="pdfs">
+        <div className="title">PDFs</div>
+        {pdfs.map(pdf => {
+          return <iframe src={pdf.webContentLink} title="pdf" />
+        })}
+      </div>
       <div className="dispositions">
         <div className="title">Disposition Table</div>
         <table>
@@ -106,7 +118,7 @@ function TicInfo(props: { id: any; data: TicData }) {
 
 function generateDispositions(dispositions: Disposition[]) {
   if (!dispositions) return [];
-  
+
   let key = 0;
   return dispositions.map((d) => {
     return (
@@ -117,6 +129,14 @@ function generateDispositions(dispositions: Disposition[]) {
       </tr>
     );
   });
+}
+
+function getPDFs(ticId: any, callback: Function) {
+  fetch('/api/pdfs/' + ticId, {
+    method: 'GET',
+  })
+    .then((res) => res.json())
+    .then((data) => callback(data));
 }
 
 export default TicInfo;

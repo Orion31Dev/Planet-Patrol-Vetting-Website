@@ -4,7 +4,7 @@ import Header from '../components/Header';
 
 const definitions = [
   { name: 'LCMOD', def: 'Light Curve Modulation' },
-  { name: '(p)SS', def: '(P otential) Significant Secondary eclipse' },
+  { name: '(p)SS', def: '(Potential) Significant Secondary eclipse' },
   { name: '(p)FP', def: '(Potential) False Positive' },
   { name: 'CP', def: 'Confirmed _lanet' },
   { name: 'PC', def: 'Planet Candidate' },

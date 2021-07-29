@@ -9,6 +9,14 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
+// Google Drive Libraries for PDFs
+const { google } = require('googleapis');
+
+const scopes = ['https://www.googleapis.com/auth/drive'];
+
+const auth = new google.auth.JWT(process.env.GOOGLE_CLIENT_EMAIL, null, process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/gm, '\n'), scopes);
+const drive = google.drive({ version: 'v3', auth });
+
 // Google Auth Library client creation
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
@@ -78,7 +86,7 @@ app.post('/api/auth/google', async (req: any, res: any) => {
     user = await db.get(userId);
   } catch {
     // User not found, create the user
-    user = { _id: userId, name: name };
+    user = { _id: userId, name: name, tics: [] };
     db.insert(user);
   }
 
@@ -131,6 +139,11 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
         file.dispositions = dispositions;
       }
 
+      if (!req.user.tics.includes(req.params.ticId)) {
+        req.user.tics.push(req.params.ticId);
+        db.insert(req.user);
+      }
+
       db.insert(file);
       res.status(200);
       res.json({ message: 'Success' });
@@ -138,6 +151,24 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
       res.status(400);
       res.json({ message: 'The request TIC could not be found.' });
     }
+  } else {
+    res.status(401);
+    res.json({ message: 'You are not signed in.' });
+  }
+});
+
+app.get('/api/unanswered-tics', async (req: any, res: any) => {
+  if (req.user) {
+    let ticList = await db.partitionedList('tic', { include_docs: true });
+    let ticArr = [];
+
+    for (let tic of ticList.rows) {
+      let id = tic.id.split(':')[1];
+      if (!req.user.tics.includes(id)) ticArr.push(id);
+    }
+
+    res.json({ list: ticArr });
+    res.status(200);
   } else {
     res.status(401);
     res.json({ message: 'You are not signed in.' });
@@ -170,6 +201,31 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
     res.status(404);
     res.json({ message: 'The request TIC could not be found.' });
   }
+});
+
+app.get('/api/pdfs/:ticId', (req: any, res: any) => {
+  drive.files.list(
+    {
+      q: `name contains '${req.params.ticId}' and '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi' in parents and mimeType = 'application/pdf'`,
+      pageSize: 10,
+      fields: 'nextPageToken, files(id, webContentLink, name)',
+    },
+    (err: any, driveRes: any) => {
+      if (err) return console.error('The API returned an error: ' + err);
+
+      const files = driveRes.data.files;
+
+      console.log(files);
+
+      if (files.length) {
+        res.json(files);
+        res.status(200);
+      } else {
+        res.json({ message: 'No files found. '});
+        res.status(404);
+      }
+    }
+  );
 });
 
 app.get('/*', (_req: any, res: any) => {
