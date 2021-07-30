@@ -10,9 +10,9 @@ function Header() {
         <input
           type="text"
           className="id-search"
-          placeholder={'0000000'}
+          placeholder={'1870990135'}
           value={idVal}
-          maxLength={7}
+          maxLength={10}
           onChange={(e) => setIdVal(validate(e.target.value))}
         />
         <div className="label">TIC ID</div>

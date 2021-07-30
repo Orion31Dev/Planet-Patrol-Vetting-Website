@@ -47,8 +47,6 @@ let sess = {
   },
 };
 
-//app.set('trust proxy', 1); // trust first proxy
-
 if (process.env.NODE_ENV !== 'production') {
   sess.cookie.secure = false;
 }
@@ -64,6 +62,20 @@ app.use(async (req: any, _res: any, next: Function) => {
   }
 
   next();
+});
+
+// Cors-anywhere proxy
+const cors_proxy = require('cors-anywhere').createServer({
+  removeHeaders: [
+    'cookie',
+    'cookie2',
+  ],
+  redirectSameOrigin: true
+});
+
+app.get('/proxy/*', function(req: any, res: any) {
+  req.url = req.url.replace('/proxy/', '/'); // Strip "/proxy" from the front of the URL.
+  cors_proxy.emit('request', req, res);
 });
 
 // Get user data

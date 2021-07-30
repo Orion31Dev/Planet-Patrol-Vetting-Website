@@ -115,6 +115,21 @@ function TicInfo(props: { id: any; data: TicData }) {
   );
 }
 
+
+/*
+TOI 3277 - TIC 319568619  
+TOI 3286 - TIC 113648563  Already vetted
+TOI 3504 - TIC 117689799 
+TOI 3514 - TIC 1870990135 
+TOI 3595 - TIC 440113053
+TOI 3604 - TIC 330135981 
+TOI 3612 - TIC 233948455 
+TOI 3693 - TIC 240823272 
+TOI 3922 - TIC 1101855081 
+TOI 3937 - TIC 367425982 
+TOI 4059 - TIC 229605891 
+TOI 4145 - TIC 279947414  
+*/
 function embeddedPdf(link: string) {
   return <PDF url={link.replace('&export=download', '')} />;
 }

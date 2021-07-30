@@ -10,14 +10,21 @@ export default function PDF(props: { url: string }) {
     setNumPages(numPages);
   }
 
+  function changePage(by: number) {
+    if (pageNumber + by > numPages || numPages + by < 0) return;
+    setPageNumber(pageNumber + by);
+  }
+
   return (
     <div className="pdf">
-      <Document file={'https://cors-anywhere.herokuapp.com/' + props.url} onLoadSuccess={onLoadSuccess}>
-        <Page pageNumber={pageNumber} />
+      <Document file={'/proxy/' + props.url} onLoadSuccess={onLoadSuccess}>
+        <Page pageNumber={pageNumber} renderTextLayer={false} />
       </Document>
-      <span>
-        Page {pageNumber} of {numPages}
-      </span>
+      <div className="controls">
+        <div className="btn" onClick={() => changePage(1)}>{'<'}</div>
+        <div className="page-num">{pageNumber} of {numPages}</div>
+        <div className="btn" onClick={() => changePage(-1)}>{'>'}</div>
+      </div>
     </div>
   );
 }
