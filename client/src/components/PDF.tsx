@@ -12,7 +12,7 @@ export default function PDF(props: { url: string }) {
 
   return (
     <div className="pdf">
-      <Document file={props.url} onLoadSuccess={onLoadSuccess}>
+      <Document file={'https://cors-anywhere.herokuapp.com/' + props.url} onLoadSuccess={onLoadSuccess}>
         <Page pageNumber={pageNumber} />
       </Document>
       <span>

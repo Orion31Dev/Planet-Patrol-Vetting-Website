@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const anywhere = require('express-cors-anywhere').default;
 
 const port = process.env.PORT || 3000;
 
@@ -233,10 +232,7 @@ app.get('/*', (_req: any, res: any) => {
   res.sendFile(INDEX_FILE, { DIST_DIR });
 });
 
-// Cors Anywhere Proxy Middleware
-async () => {
-  await new Promise((resolve) => app.use('/api/proxy/*', anywhere()).listen(port, resolve));
-};
+app.listen(port);
 
 async function asyncForEach(array: any[], callback: Function) {
   for (let index = 0; index < array.length; index++) {
