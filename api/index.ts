@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const anywhere = require('express-cors-anywhere').default;
 
 const port = process.env.PORT || 3000;
 
@@ -221,7 +222,7 @@ app.get('/api/pdfs/:ticId', (req: any, res: any) => {
         res.json(files);
         res.status(200);
       } else {
-        res.json({ message: 'No files found. '});
+        res.json({ message: 'No files found. ' });
         res.status(404);
       }
     }
@@ -232,7 +233,10 @@ app.get('/*', (_req: any, res: any) => {
   res.sendFile(INDEX_FILE, { DIST_DIR });
 });
 
-app.listen(port);
+// Cors Anywhere Proxy Middleware
+async () => {
+  await new Promise((resolve) => app.use('/api/proxy/*', anywhere()).listen(port, resolve));
+};
 
 async function asyncForEach(array: any[], callback: Function) {
   for (let index = 0; index < array.length; index++) {
