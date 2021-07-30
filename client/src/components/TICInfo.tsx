@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PDF from './PDF';
 
 export type TicData = {
   epoch: number;
@@ -95,9 +96,7 @@ function TicInfo(props: { id: any; data: TicData }) {
       </div>
       <div className="pdfs">
         <div className="title">PDFs</div>
-        {pdfs.map(pdf => {
-          return <iframe src={pdf.webContentLink} title="pdf" />
-        })}
+        {pdfs.map((pdf) => embeddedPdf(pdf.webContentLink))}
       </div>
       <div className="dispositions">
         <div className="title">Disposition Table</div>
@@ -114,6 +113,10 @@ function TicInfo(props: { id: any; data: TicData }) {
       </div>
     </div>
   );
+}
+
+function embeddedPdf(link: string) {
+  return <PDF url={link.replace('&export=download', '')} />;
 }
 
 function generateDispositions(dispositions: Disposition[]) {
