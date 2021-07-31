@@ -47,7 +47,7 @@ let sess = {
   },
 };
 
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); // Trust first proxy
 
 if (process.env.NODE_ENV !== 'production') {
   sess.cookie.secure = false;
@@ -81,7 +81,6 @@ app.get('/proxy/*', function (req: any, res: any) {
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
   const { token } = req.body;
-  console.log(token);
 
   const ticket = await client.verifyIdToken({
     idToken: token,
