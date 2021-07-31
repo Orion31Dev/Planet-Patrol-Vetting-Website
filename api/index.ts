@@ -66,14 +66,11 @@ app.use(async (req: any, _res: any, next: Function) => {
 
 // Cors-anywhere proxy
 const cors_proxy = require('cors-anywhere').createServer({
-  removeHeaders: [
-    'cookie',
-    'cookie2',
-  ],
-  redirectSameOrigin: true
+  removeHeaders: ['cookie', 'cookie2'],
+  redirectSameOrigin: true,
 });
 
-app.get('/proxy/*', function(req: any, res: any) {
+app.get('/proxy/*', function (req: any, res: any) {
   req.url = req.url.replace('/proxy/', '/'); // Strip "/proxy" from the front of the URL.
   cors_proxy.emit('request', req, res);
 });
@@ -215,30 +212,39 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
   }
 });
 
-app.get('/api/pdfs/:ticId', (req: any, res: any) => {
-  drive.files.list(
-    {
-      q: `name contains '${req.params.ticId}' and '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi' in parents and mimeType = 'application/pdf'`,
-      pageSize: 10,
-      fields: 'nextPageToken, files(id, webContentLink, name)',
-    },
-    (err: any, driveRes: any) => {
-      if (err) return console.error('The API returned an error: ' + err);
+app.get('/api/pdfs/:ticId', async (req: any, res: any) => {
+  let files: any[] = [];
 
-      const files = driveRes.data.files;
+  files.push(...(await getPDFsFromFolder(req.params.ticId, '1raRVDT9TuLj-Lv34VOBUOdFGUh-hsh7s') as []));
+  files.push(...(await getPDFsFromFolder(req.params.ticId, '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi') as []));
 
-      console.log(files);
+  console.log(files);
 
-      if (files.length) {
-        res.json(files);
-        res.status(200);
-      } else {
-        res.json({ message: 'No files found. ' });
-        res.status(404);
-      }
-    }
-  );
+  if (files.length) {
+    res.json(files);
+    res.status(200);
+  } else {
+    res.json({ message: 'No files found. ' });
+    res.status(404);
+  }
 });
+
+function getPDFsFromFolder(ticId: string, folderId: string) {
+  return new Promise((resolve, reject) => {
+    drive.files.list(
+      {
+        q: `name contains '${ticId}' and '${folderId}' in parents and mimeType = 'application/pdf'`,
+        pageSize: 10,
+        fields: 'nextPageToken, files(id, webContentLink, name)',
+      },
+      (err: any, driveRes: any) => {
+        if (err) reject(console.error('The API returned an error: ' + err));
+
+        resolve(driveRes.data.files);
+      }
+    );
+  });
+}
 
 app.get('/*', (_req: any, res: any) => {
   res.sendFile(INDEX_FILE, { DIST_DIR });

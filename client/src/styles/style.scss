@@ -170,12 +170,22 @@ a {
       }
     }
 
-    .dispositions {
+    .dispositions,
+    .pdfs {
       margin-top: 4vmin;
-      
+
       .title {
         font-size: 0.5em;
         margin: 0.5vmin 0;
+
+        span {
+          color: $blue-gray;
+          cursor: pointer;
+
+          &:hover {
+            color: $off-white;
+          }
+        }
       }
 
       table {
@@ -194,6 +204,14 @@ a {
 
           th {
             font-weight: $font-light;
+          }
+
+          a {
+            color: $light-gray;
+
+            &:hover {
+              color: $off-white;
+            }
           }
 
           &:nth-child(odd) {
@@ -250,7 +268,7 @@ a {
           }
 
           .page-num {
-            font-size: .8em;
+            font-size: 0.8em;
           }
         }
       }

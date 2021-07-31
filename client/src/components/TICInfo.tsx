@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PDF from './PDF';
+//import PDF from './PDF';
 
 export type TicData = {
   epoch: number;
@@ -23,6 +23,7 @@ export type Disposition = {
 
 function TicInfo(props: { id: any; data: TicData }) {
   let [pdfs, setPDFs]: [any[], Function] = useState([]);
+  let [showPDFs, setShowPDFs] = useState(true);
 
   useEffect(() => {
     getPDFs(props.id, setPDFs);
@@ -95,8 +96,16 @@ function TicInfo(props: { id: any; data: TicData }) {
         </div>
       </div>
       <div className="pdfs">
-        <div className="title">PDFs</div>
-        {pdfs.map((pdf) => embeddedPdf(pdf.webContentLink))}
+        <div className="title">PDFs <span onClick={() => setShowPDFs(!showPDFs)}>[{showPDFs ? 'Collapse' : 'Expand'}]</span></div>
+        <table>
+          <tbody>
+            <tr className="headers">
+              <th>Name</th>
+              <th>Links</th>
+            </tr>
+            {showPDFs && generatePDFs(pdfs)}
+          </tbody>
+        </table>
       </div>
       <div className="dispositions">
         <div className="title">Disposition Table</div>
@@ -115,6 +124,7 @@ function TicInfo(props: { id: any; data: TicData }) {
   );
 }
 
+//         {pdfs.map((pdf) => embeddedPdf(pdf.webContentLink))}
 
 /*
 TOI 3277 - TIC 319568619  
@@ -130,8 +140,22 @@ TOI 3937 - TIC 367425982
 TOI 4059 - TIC 229605891 
 TOI 4145 - TIC 279947414  
 */
-function embeddedPdf(link: string) {
-  return <PDF url={link.replace('&export=download', '')} />;
+//function embeddedPdf(link: string) {
+ // return <PDF url={link.replace('&export=download', '')} />;
+//}
+
+function generatePDFs(pdfs: any[]) {
+  if (!pdfs.length) return[];
+
+  let key = 0;
+  return pdfs.map((p) => {
+    return (
+      <tr key={key++}>
+        <td>{p.name}</td>
+        <td><a target="_blank" rel="noreferrer" href={p.webContentLink.replace('&export=download', '')}>[Link]</a></td>
+      </tr>
+    );
+  });
 }
 
 function generateDispositions(dispositions: Disposition[]) {

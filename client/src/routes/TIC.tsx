@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import TicInfo, { TicData } from '../components/TicInfo';
+import TicInfo, { TicData } from '../components/TICInfo';
 import Header from '../components/Header';
 import Message404 from '../components/Message404';
 import { useEffect } from 'react';
