@@ -43,7 +43,6 @@ function getTicData(ticId: string, setIs404: Function, setTicData: Function) {
     else
       res.json().then((data) => {
         setTicData(data as TicData);
-        console.log(data);
       });
   });
 }

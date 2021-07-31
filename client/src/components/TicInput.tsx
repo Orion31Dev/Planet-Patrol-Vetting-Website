@@ -23,7 +23,6 @@ export default function TicInput(props: { id: any, updateFunction: Function }) {
 }
 
 function submitData(ticId: any, disposition: string, comments: string, updateFunction: Function) {
-  console.log("ehehe");
   fetch('/api/submit/' + ticId, {
     method: 'POST',
     body: JSON.stringify({
@@ -34,7 +33,6 @@ function submitData(ticId: any, disposition: string, comments: string, updateFun
       'Content-Type': 'application/json',
     },
   }).then(res => {
-    console.log(res);
     if (res.status === 200) updateFunction();
   });
 }

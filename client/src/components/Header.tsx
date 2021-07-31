@@ -54,8 +54,6 @@ function renderGoogleButton(renderProps: any) {
 }
 
 async function handleLogin(googleData: any, callback: Function, setUser: Function) {
-  console.log(googleData.tokenId);
-
   const res = await fetch('/api/auth/google', {
     method: 'POST',
     body: JSON.stringify({

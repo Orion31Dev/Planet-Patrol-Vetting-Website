@@ -33,5 +33,4 @@ FSOP == Field Star in Other Pixel (A star within the Delta Tmag, but outside the
 
 str.split('\n').forEach((s) => {
   let spl = s.split(' == ');
-  console.log(`{ name: '${spl[0]}', def: '${spl[1]}'},`);
 });

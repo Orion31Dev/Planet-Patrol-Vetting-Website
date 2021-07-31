@@ -30,8 +30,8 @@
     "webpack-merge": "^5.8.0"
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node api/index.js",
     "dev": "concurrently \"webpack --mode development --watch\" \"nodemon api/index.ts NODE_ENV=development\"",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production && tsc api/index.ts"
   }
 }
