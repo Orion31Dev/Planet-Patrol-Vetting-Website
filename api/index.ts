@@ -218,6 +218,8 @@ app.get('/api/pdfs/:ticId', async (req: any, res: any) => {
 
   files.push(...(await getPDFsFromFolder(req.params.ticId, '1raRVDT9TuLj-Lv34VOBUOdFGUh-hsh7s') as []));
   files.push(...(await getPDFsFromFolder(req.params.ticId, '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi') as []));
+  files.push(...(await getPDFsFromFolder(req.params.ticId, '1oYtjXgzhplUzUZ7zO0yF5QM-3V6kQsUi') as []));
+  files.push(...(await getPDFsFromFolder(req.params.ticId, '1_zsiNEZyiIeq4_vBpdbhtVhEJdfXxZTp') as []));
 
   if (files.length) {
     res.json(files);
