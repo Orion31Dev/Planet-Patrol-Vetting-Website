@@ -79,6 +79,7 @@ app.get('/proxy/*', function (req: any, res: any) {
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
   const { token } = req.body;
+  console.log(token);
 
   const ticket = await client.verifyIdToken({
     idToken: token,
