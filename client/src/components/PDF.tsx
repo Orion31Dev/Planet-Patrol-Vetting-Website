@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/*import React, { useState } from 'react';
 
 import { Document, Page } from 'react-pdf/dist/umd/entry.webpack';
 
@@ -27,4 +27,9 @@ export default function PDF(props: { url: string }) {
       </div>
     </div>
   );
+}
+*/
+
+export default function PDF() {
+  return <div></div>
 }
