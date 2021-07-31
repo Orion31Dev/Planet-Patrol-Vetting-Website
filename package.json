@@ -33,6 +33,10 @@
     "webpack-cli": "^4.7.2",
     "webpack-merge": "^5.8.0"
   },
+  "workspaces": [
+    "api",
+    "client"
+  ],
   "scripts": {
     "start": "node api/index.js",
     "dev": "concurrently \"webpack --mode development --watch\" \"nodemon api/index.ts NODE_ENV=development\"",
