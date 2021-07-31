@@ -47,6 +47,8 @@ let sess = {
   },
 };
 
+app.set('trust proxy', 1);
+
 if (process.env.NODE_ENV !== 'production') {
   sess.cookie.secure = false;
 }
