@@ -124,12 +124,23 @@ a {
     > .title {
       font-weight: $font-thin;
       font-size: 1.5em;
-      margin: 0 0 3vmin;
       text-align: center;
 
       .id {
         font-weight: $font-title;
         display: inline-block;
+      }
+    }
+
+    .exofop {
+      text-align: center;
+      margin: -1vmin 0 3vmin;
+
+      font-size: .6em;
+      color: $accent-light-blue;
+
+      &:hover {
+        color: $off-white;
       }
     }
 
@@ -179,7 +190,7 @@ a {
         margin: 0.5vmin 0;
 
         span {
-          color: $blue-gray;
+          color: $gray;
           cursor: pointer;
 
           &:hover {
@@ -323,8 +334,8 @@ a {
     margin: 2vmin 0;
   }
 
-  .need-attention {
-    margin-top: 2vmin;
+  .tic-list {
+    margin: 2vmin 0;
     flex-basis: 100%;
 
     .title {

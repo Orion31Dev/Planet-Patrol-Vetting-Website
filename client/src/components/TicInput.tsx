@@ -9,7 +9,9 @@ export default function TicInput(props: { id: any, updateFunction: Function }) {
     <div className="user-input section">
       <select onChange={(e) => setDisposition(e.target.value)} value={disposition}>
         <option value="FP">FP</option>
+        <option value="pFP">pFP</option>
         <option value="PC">PC</option>
+        <option value="CP">CP</option>
       </select>
       <div className="input-wrapper">
         <input type="text" onChange={(e) => setComments(e.target.value)} value={comments} />

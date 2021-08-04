@@ -6,10 +6,15 @@ import Message404 from '../components/Message404';
 
 function Profile() {
   let [user, setUser]: [any, Function] = useState(null);
+  let [answeredTics, setAnsweredTics] = useState([]);
   let [unansweredTics, setUnansweredTics] = useState([]);
 
   useEffect(() => {
-    getUnansweredTics(setUnansweredTics);
+    getAnsweredTics((data: any) => {
+      console.log(data);
+      setAnsweredTics(data.answered);
+      setUnansweredTics(data.unanswered);
+    });
   }, []);
 
   if (!user || !user._id) {
@@ -30,9 +35,17 @@ function Profile() {
         <div className="button" onClick={logOut}>
           Log Out
         </div>
-        <div className="need-attention">
-          <div className="title">{unansweredTics.length > 0 ? "These TICs need your attention:" : "You have commented on all TICs"}</div>
-          <div className="tics">{unansweredTics.map(ticLink)}</div>
+        {unansweredTics.length > 0 && (
+          <div className="tic-list">
+            <div className="title">These TICs need your attention:</div>
+            <div className="tics">{unansweredTics.map(ticLink)}</div>
+          </div>
+        )}
+        <div className="tic-list">
+          <div className="title">
+            {answeredTics.length > 0 ? 'You have responded to these TICs:' : 'You have not responded to any TICs.'}
+          </div>
+          <div className="tics">{answeredTics.map(ticLink)}</div>
         </div>
       </div>
     </div>
@@ -48,13 +61,13 @@ function ticLink(ticId: string) {
   );
 }
 
-function getUnansweredTics(callback: Function) {
-  fetch('/api/unanswered-tics', {
+function getAnsweredTics(callback: Function) {
+  fetch('/api/answered-tics', {
     method: 'GET',
   })
     .then((res) => res.json())
     .then((data) => {
-      callback(data.list);
+      callback(data);
     });
 }
 

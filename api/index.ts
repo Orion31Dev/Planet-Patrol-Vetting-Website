@@ -169,17 +169,19 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
   }
 });
 
-app.get('/api/unanswered-tics', async (req: any, res: any) => {
+app.get('/api/answered-tics', async (req: any, res: any) => {
   if (req.user) {
     let ticList = await db.partitionedList('tic', { include_docs: true });
-    let ticArr = [];
+    let unansweredTics = [];
+    let answeredTics = [];
 
     for (let tic of ticList.rows) {
       let id = tic.id.split(':')[1];
-      if (!req.user.tics.includes(id)) ticArr.push(id);
+      if (!req.user.tics.includes(id)) unansweredTics.push(id);
+      else answeredTics.push(id);
     }
 
-    res.json({ list: ticArr });
+    res.json({ unanswered: unansweredTics, answered: answeredTics });
     res.status(200);
   } else {
     res.status(401);

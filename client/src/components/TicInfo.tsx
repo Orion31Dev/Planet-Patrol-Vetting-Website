@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 //import PDF from './PDF';
 
 export type TicData = {
+  exofopLink: string;
   epoch: number;
   period: number;
   duration: number;
@@ -34,6 +35,7 @@ function TicInfo(props: { id: any; data: TicData }) {
       <div className="title">
         TIC <div className="id">{props.id}</div>
       </div>
+      <div className="exofop"><a href={props.data.exofopLink}>[Exofop Link]</a></div>
       <div className="stats">
         <div className="stat">
           <div className="label">
