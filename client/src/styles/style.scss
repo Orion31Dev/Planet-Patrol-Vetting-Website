@@ -1,5 +1,6 @@
 @use 'values' as *;
 @use 'mixins' as *;
+@use 'sass:color';
 
 body {
   background: $bkg-color;
@@ -136,7 +137,7 @@ a {
       text-align: center;
       margin: -1vmin 0 3vmin;
 
-      font-size: .6em;
+      font-size: 0.6em;
       color: $accent-light-blue;
 
       &:hover {
@@ -196,6 +197,14 @@ a {
           &:hover {
             color: $off-white;
           }
+        }
+      }
+
+      .group {
+        background-color: color.adjust($gold, $alpha: -.25);
+        * {
+          color: black;
+          font-weight: $font-light;
         }
       }
 
@@ -351,13 +360,17 @@ a {
     .tics {
       margin-top: 2vmin;
       text-align: center;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     .tic-link {
       @include button($blue-gray);
       font-size: 0.8em;
 
-      margin: 0 0.75vmin;
+      margin: 1vmin 0.75vmin;
     }
   }
 }

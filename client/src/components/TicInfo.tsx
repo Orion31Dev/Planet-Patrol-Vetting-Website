@@ -35,7 +35,7 @@ function TicInfo(props: { id: any; data: TicData }) {
       <div className="title">
         TIC <div className="id">{props.id}</div>
       </div>
-      <div className="exofop"><a href={props.data.exofopLink}>[Exofop Link]</a></div>
+      <div className="exofop"><a href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a></div>
       <div className="stats">
         <div className="stat">
           <div className="label">
@@ -166,7 +166,7 @@ function generateDispositions(dispositions: Disposition[]) {
   let key = 0;
   return dispositions.map((d) => {
     return (
-      <tr key={key++}>
+      <tr key={key++} className={d.name === "Group" ? 'group' : ''}>
         <td>{d.name}</td>
         <td>{d.disposition}</td>
         <td>{d.comments}</td>
