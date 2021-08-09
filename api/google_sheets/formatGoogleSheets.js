@@ -140,7 +140,7 @@ async function processLineByLine() {
     db.insert(format(line));
 
     // Sleep
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 500));
   }
 }
 

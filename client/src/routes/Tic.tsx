@@ -11,12 +11,16 @@ const emptyTICData = {} as TicData;
 function Tic() {
   let { ticId }: any = useParams();
   let [is404, setIs404] = useState(false);
-  let [isLoggedIn, setIsLoggedIn] = useState(false);
+  let [user, setUser]: [any, Function] = useState(null);
   let [ticData, setTicData] = useState(emptyTICData);
 
   useEffect(() => {
     getTicData(ticId, setIs404, setTicData);
   }, [ticId]);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   if (is404)
     return (
@@ -28,9 +32,9 @@ function Tic() {
 
   return (
     <div className="tic">
-      <Header loggedInCallback={() => setIsLoggedIn(true)} />
+      <Header loggedInCallback={setUser} />
       <TicInfo id={ticId} data={ticData} />
-      {isLoggedIn && <TicInput id={ticId} updateFunction={() => getTicData(ticId, setIs404, setTicData)} />}
+      {user && <TicInput id={ticId} user={user} updateFunction={() => getTicData(ticId, setIs404, setTicData)} />}
     </div>
   );
 }

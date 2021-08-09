@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
-function Header() {
+function Search(props: { inputUpdateCallback?: Function }) {
   let [idVal, setIdVal] = useState('');
+
+  useEffect(() => {
+    if (props.inputUpdateCallback) props.inputUpdateCallback(idVal);
+  }, [props, idVal]);
 
   return (
     <div className="search section">
@@ -18,7 +23,7 @@ function Header() {
         <div className="label">TIC ID</div>
       </div>
       <div className="btn-search" onClick={() => goTo(idVal)}>
-        Find
+        Go
       </div>
     </div>
   );
@@ -32,4 +37,4 @@ function goTo(id: string) {
   window.location.href = `/tic/${id}`;
 }
 
-export default Header;
+export default Search;

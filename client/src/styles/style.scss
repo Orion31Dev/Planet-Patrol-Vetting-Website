@@ -33,14 +33,22 @@ a {
 }
 
 .header {
+  position: sticky;
+  top: 0;
+
+  z-index: 101;
+
+  background: $bkg-color;
+
   text-align: left;
-  position: relative;
   display: flex;
   align-items: center;
 
   font-size: 2em;
 
-  padding: 2vmin $horizontal-margin;
+  padding: 0 $horizontal-margin;
+
+  height: $header-height;
 
   border-bottom: 0.15vmin solid $dark-gray;
 
@@ -96,6 +104,45 @@ a {
   }
 }
 
+.table {
+  margin: 5vmin $horizontal-margin * 0.15;
+
+  .title {
+    @include mini-title;
+  }
+
+  table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  tr.headers {
+    position: sticky;
+    top: $header-height;
+    z-index: 100;
+  }
+
+  th,
+  td {
+    text-align: center;
+    font-size: 0.7em;
+    padding: 1.35vmin 0.2vmin;
+
+    a {
+      color: $off-white;
+      text-decoration: underline;
+
+      &.gray {
+        color: $gray;
+
+        &:hover {
+          color: $off-white;
+        }
+      }
+    }
+  }
+}
+
 .search {
   font-size: 3.5em;
   .title {
@@ -145,6 +192,10 @@ a {
       }
     }
 
+    .null {
+      color: $dark-gray;
+    }
+
     .stats {
       display: block;
       width: 100%;
@@ -187,8 +238,7 @@ a {
       margin-top: 4vmin;
 
       .title {
-        font-size: 0.5em;
-        margin: 0.5vmin 0;
+        @include mini-title;
 
         span {
           color: $gray;
@@ -201,54 +251,17 @@ a {
       }
 
       .group {
-        background-color: color.adjust($gold, $alpha: -.25);
+        background-color: color.adjust($gold, $alpha: -0.25);
         * {
           color: black;
           font-weight: $font-light;
-        }
-      }
-
-      table {
-        width: 100%;
-        font-size: 0.75em;
-        border-collapse: collapse;
-
-        tr {
-          margin: 0;
-
-          td,
-          th {
-            text-align: left;
-            padding: 0.8vmin 3.5vmin;
-          }
-
-          th {
-            font-weight: $font-light;
-          }
-
-          a {
-            color: $light-gray;
-
-            &:hover {
-              color: $off-white;
-            }
-          }
-
-          &:nth-child(odd) {
-            background-color: $dark-gray;
-          }
-
-          &.headers {
-            background-color: $accent-dark-blue;
-          }
         }
       }
     }
 
     .pdfs {
       .title {
-        font-size: 0.5em;
-        margin: 0.5vmin 0;
+        @include mini-title;
       }
 
       .pdf {
@@ -301,7 +314,7 @@ a {
 
     position: relative;
 
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 
     select {
       @include input;
@@ -318,6 +331,49 @@ a {
     .button {
       @include button($accent-blue);
       margin-left: 1vmin;
+
+      &.group {
+        @include button($gold);
+        margin-left: 2vmin;
+
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+table {
+  width: 100%;
+  font-size: 0.75em;
+  border-collapse: collapse;
+
+  tr {
+    margin: 0;
+
+    td,
+    th {
+      text-align: left;
+      padding: 0.8vmin 3.5vmin;
+    }
+
+    th {
+      font-weight: $font-light;
+    }
+
+    a {
+      color: $light-gray;
+
+      &:hover {
+        color: $off-white;
+      }
+    }
+
+    &:nth-child(odd) {
+      background-color: $dark-gray;
+    }
+
+    &.headers {
+      background-color: $accent-dark-blue;
     }
   }
 }
@@ -367,7 +423,12 @@ a {
     }
 
     .tic-link {
-      @include button($blue-gray);
+      @include button($gray);
+
+      &.unanswered {
+        @include button($off-white);
+      }
+
       font-size: 0.8em;
 
       margin: 1vmin 0.75vmin;

@@ -30,75 +30,81 @@ function TicInfo(props: { id: any; data: TicData }) {
     getPDFs(props.id, setPDFs);
   }, [props.id]);
 
+  let nullText = <span className="null">null</span>;
+
   return (
     <div className="tic-info section">
       <div className="title">
         TIC <div className="id">{props.id}</div>
       </div>
-      <div className="exofop"><a href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a></div>
+      <div className="exofop">
+        <a href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a>
+      </div>
       <div className="stats">
         <div className="stat">
           <div className="label">
             Epoch <span>[BJD]</span>
           </div>
-          <div className="num">{props.data.epoch}</div>
+          <div className="num">{props.data.epoch || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             Period <span>[Days]</span>
           </div>
-          <div className="num">{props.data.period}</div>
+          <div className="num">{props.data.period || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             Duration <span>[Hours]</span>
           </div>
-          <div className="num">{props.data.duration?.toFixed(2)}</div>
+          <div className="num">{props.data.duration?.toFixed(2) || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             Depth <span>[ppm]</span>
           </div>
-          <div className="num">{props.data.depth}</div>
+          <div className="num">{props.data.depth || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             Depth <span>[%]</span>
           </div>
-          <div className="num">{props.data.depthPercent?.toFixed(2)}</div>
+          <div className="num">{props.data.depthPercent?.toFixed(2) || nullText}</div>
         </div>
       </div>
       <div className="stats">
         <div className="stat">
           <div className="label">Sector(s)</div>
-          <div className="num">{props.data.sectors}</div>
+          <div className="num">{props.data.sectors || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             RStar <span>[RSun]</span>
           </div>
-          <div className="num">{props.data.rStar?.toFixed(2)}</div>
+          <div className="num">{props.data.rStar?.toFixed(2) || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">
             RTranister <span>[RJupiter]</span>
           </div>
-          <div className="num">{props.data.rTranister?.toFixed(2)}</div>
+          <div className="num">{props.data.rTranister?.toFixed(2) || nullText}</div>
         </div>
         <div className="stat">
           <div className="label">Tmag</div>
-          <div className="num">{props.data.tmag}</div>
+          <div className="num">{props.data.tmag || nullText}</div>
         </div>
         <div className="stat up">
           <div className="label">
             Delta Tmag <br />
             <span>Nearby Sources</span>
           </div>
-          <div className="num">{props.data.deltaTmag?.toFixed(2)}</div>
+          <div className="num">{props.data.deltaTmag?.toFixed(2) || nullText}</div>
         </div>
       </div>
       <div className="pdfs">
-        <div className="title">PDFs <span onClick={() => setShowPDFs(!showPDFs)}>[{showPDFs ? 'Collapse' : 'Expand'}]</span></div>
+        <div className="title">
+          PDFs <span onClick={() => setShowPDFs(!showPDFs)}>[{showPDFs ? 'Collapse' : 'Expand'}]</span>
+        </div>
         <table>
           <tbody>
             <tr className="headers">
@@ -143,18 +149,22 @@ TOI 4059 - TIC 229605891
 TOI 4145 - TIC 279947414  
 */
 //function embeddedPdf(link: string) {
- // return <PDF url={link.replace('&export=download', '')} />;
+// return <PDF url={link.replace('&export=download', '')} />;
 //}
 
 function generatePDFs(pdfs: any[]) {
-  if (!pdfs.length) return[];
+  if (!pdfs.length) return [];
 
   let key = 0;
   return pdfs.map((p) => {
     return (
       <tr key={key++}>
         <td>{p.name}</td>
-        <td><a target="_blank" rel="noreferrer" href={p.webContentLink.replace('&export=download', '')}>[Link]</a></td>
+        <td>
+          <a target="_blank" rel="noreferrer" href={p.webContentLink.replace('&export=download', '')}>
+            [Link]
+          </a>
+        </td>
       </tr>
     );
   });
@@ -166,7 +176,7 @@ function generateDispositions(dispositions: Disposition[]) {
   let key = 0;
   return dispositions.map((d) => {
     return (
-      <tr key={key++} className={d.name === "Group" ? 'group' : ''}>
+      <tr key={key++} className={d.name === 'Group' ? 'group' : ''}>
         <td>{d.name}</td>
         <td>{d.disposition}</td>
         <td>{d.comments}</td>

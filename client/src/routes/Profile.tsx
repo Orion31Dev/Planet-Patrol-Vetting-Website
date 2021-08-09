@@ -38,14 +38,14 @@ function Profile() {
         {unansweredTics.length > 0 && (
           <div className="tic-list">
             <div className="title">These TICs need your attention:</div>
-            <div className="tics">{unansweredTics.map(ticLink)}</div>
+            <div className="tics">{unansweredTics.map((tic) => ticLink(tic, false))}</div>
           </div>
         )}
         <div className="tic-list">
           <div className="title">
             {answeredTics.length > 0 ? 'You have responded to these TICs:' : 'You have not responded to any TICs.'}
           </div>
-          <div className="tics">{answeredTics.map(ticLink)}</div>
+          <div className="tics">{answeredTics.map((tic) => ticLink(tic, true))}</div>
         </div>
       </div>
     </div>
@@ -53,9 +53,9 @@ function Profile() {
 }
 
 let index = 0;
-function ticLink(ticId: string) {
+function ticLink(ticId: string, answered: boolean) {
   return (
-    <a href={`/tic/${ticId}`} key={index++} className="tic-link">
+    <a href={`/tic/${ticId}`} key={index++} className={"tic-link" + (answered ? "" : " unanswered")}>
       {ticId}
     </a>
   );

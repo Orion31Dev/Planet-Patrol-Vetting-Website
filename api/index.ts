@@ -132,7 +132,7 @@ app.get('/api/me', async (req: any, res: any) => {
 // User submits or updates disposition
 app.post('/api/submit/:ticId', async (req: any, res: any) => {
   if (req.user) {
-    const { disposition, comments } = req.body;
+    const { disposition, comments, group } = req.body;
 
     if (!disposition) {
       res.status(400);
@@ -144,10 +144,20 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
       let fileId = 'tic:' + req.params.ticId;
       let file = await db.get(fileId);
 
-      if (file.dispositions) file.dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+      let key = req.session.userId;
+
+      if (group) {
+        if (req.user.group) key = 'user:group';
+        else {
+          res.status(403);
+          res.json({ message: 'You do not have permission to submit as group.' });
+        }
+      }
+
+      if (file.dispositions) file.dispositions[key] = { disposition: disposition, comments: comments };
       else {
         let dispositions: { [key: string]: any } = {};
-        dispositions[req.session.userId] = { disposition: disposition, comments: comments };
+        dispositions[key] = { disposition: disposition, comments: comments };
         file.dispositions = dispositions;
       }
 
@@ -169,6 +179,17 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
   }
 });
 
+app.get('/api/all-tics', async (req: any, res: any) => {
+  try {
+    let ticList = await db.partitionedList('tic', { include_docs: true });
+    res.json(ticList.rows);
+    res.status(200);
+  } catch {
+    res.status(500);
+    res.json({ message: 'An error occurred.' });
+  }
+});
+
 app.get('/api/answered-tics', async (req: any, res: any) => {
   if (req.user) {
     let ticList = await db.partitionedList('tic', { include_docs: true });
@@ -177,8 +198,8 @@ app.get('/api/answered-tics', async (req: any, res: any) => {
 
     for (let tic of ticList.rows) {
       let id = tic.id.split(':')[1];
-      if (!req.user.tics.includes(id)) unansweredTics.push(id);
-      else answeredTics.push(id);
+      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push(id);
+      else unansweredTics.push(id);
     }
 
     res.json({ unanswered: unansweredTics, answered: answeredTics });
@@ -220,10 +241,10 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
 app.get('/api/pdfs/:ticId', async (req: any, res: any) => {
   let files: any[] = [];
 
-  files.push(...(await getPDFsFromFolder(req.params.ticId, '1raRVDT9TuLj-Lv34VOBUOdFGUh-hsh7s') as []));
-  files.push(...(await getPDFsFromFolder(req.params.ticId, '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi') as []));
-  files.push(...(await getPDFsFromFolder(req.params.ticId, '1oYtjXgzhplUzUZ7zO0yF5QM-3V6kQsUi') as []));
-  files.push(...(await getPDFsFromFolder(req.params.ticId, '1_zsiNEZyiIeq4_vBpdbhtVhEJdfXxZTp') as []));
+  files.push(...((await getPDFsFromFolder(req.params.ticId, '1raRVDT9TuLj-Lv34VOBUOdFGUh-hsh7s')) as []));
+  files.push(...((await getPDFsFromFolder(req.params.ticId, '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi')) as []));
+  files.push(...((await getPDFsFromFolder(req.params.ticId, '1oYtjXgzhplUzUZ7zO0yF5QM-3V6kQsUi')) as []));
+  files.push(...((await getPDFsFromFolder(req.params.ticId, '1_zsiNEZyiIeq4_vBpdbhtVhEJdfXxZTp')) as []));
 
   if (files.length) {
     res.json(files);

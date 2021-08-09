@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-export default function TicInput(props: { id: any, updateFunction: Function }) {
+export default function TicInput(props: { id: any; updateFunction: Function; user: any }) {
   let [disposition, setDisposition] = useState('FP');
   let [comments, setComments] = useState('');
 
@@ -17,24 +17,30 @@ export default function TicInput(props: { id: any, updateFunction: Function }) {
         <input type="text" onChange={(e) => setComments(e.target.value)} value={comments} />
         <div className="label">Comments</div>
       </div>
-      <div className="button" onClick={() => submitData(props.id, disposition, comments, props.updateFunction)}>
+      <div className="button" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, false)}>
         Submit
       </div>
+      {props.user.group && (
+        <div className="button group" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, true)}>
+          Submit as Group
+        </div>
+      )}
     </div>
   );
 }
 
-function submitData(ticId: any, disposition: string, comments: string, updateFunction: Function) {
+function submitData(ticId: any, disposition: string, comments: string, updateFunction: Function, group: boolean) {
   fetch('/api/submit/' + ticId, {
     method: 'POST',
     body: JSON.stringify({
       comments: comments,
       disposition: disposition,
+      group: group,
     }),
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then(res => {
+  }).then((res) => {
     if (res.status === 200) updateFunction();
   });
 }
