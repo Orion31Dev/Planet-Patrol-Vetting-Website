@@ -23,6 +23,8 @@ function Header(props: { loggedInCallback?: Function }) {
         <a href="/">Home</a>
         <div className="sep">|</div>
         <a href="/dictionary">Dictionary</a>
+        <div className="sep">|</div>
+        <a href="https://github.com/Orion31Dev/Planet-Patrol-Vetting-Website/">GitHub</a>
       </div>
       {!loggedIn && (
         <GoogleLogin
