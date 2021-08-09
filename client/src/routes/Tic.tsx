@@ -17,11 +17,7 @@ function Tic() {
   useEffect(() => {
     getTicData(ticId, setIs404, setTicData);
   }, [ticId]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
+  
   if (is404)
     return (
       <div>

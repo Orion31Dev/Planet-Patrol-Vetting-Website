@@ -11,7 +11,6 @@ function Profile() {
 
   useEffect(() => {
     getAnsweredTics((data: any) => {
-      console.log(data);
       setAnsweredTics(data.answered);
       setUnansweredTics(data.unanswered);
     });
