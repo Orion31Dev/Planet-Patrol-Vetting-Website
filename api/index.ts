@@ -98,7 +98,7 @@ app.post('/api/auth/google', async (req: any, res: any) => {
     user = await db.get(userId);
   } catch {
     // User not found, create the user
-    user = { _id: userId, name: name, tics: [] };
+    user = { _id: userId, name: name };
     db.insert(user);
   }
 
@@ -159,11 +159,6 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
         let dispositions: { [key: string]: any } = {};
         dispositions[key] = { disposition: disposition, comments: comments };
         file.dispositions = dispositions;
-      }
-
-      if (!req.user.tics.includes(req.params.ticId)) {
-        req.user.tics.push(req.params.ticId);
-        db.insert(req.user);
       }
 
       db.insert(file);
