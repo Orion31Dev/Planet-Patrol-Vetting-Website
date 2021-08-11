@@ -166,6 +166,7 @@ function generateDispositions(dispositions: Disposition[]) {
 }
 
 function getPDFs(ticId: any, callback: Function) {
+  ticId = ticId.replace(/\(([^)]+)\)/gm, ''); // Remove "(2)" etc from multiplanetary systems
   fetch('/api/pdfs/' + ticId, {
     method: 'GET',
   })

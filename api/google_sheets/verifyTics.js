@@ -11,9 +11,13 @@ const db = cloudant.use('planet-patrol-db');
 let ticList;
 
 async function getTicList() {
-  //ticList = (await db.partitionedList('tic')).rows;
-  //ticList.push(await db.partitionedList('tic', { offset: 2000 }).rows);
-  console.log(await db.partitionedList('tic'));
+  let pList = await db.partitionedList('tic');
+  ticList = pList.rows;
+
+  while (ticList.length < pList.total_rows) {
+    pList = await db.partitionedList('tic', { startkey: `${ticList[ticList.length - 1].id}\0` });
+    ticList = ticList.concat(pList.rows);
+  }
 }
 
 let ids = {};
@@ -45,13 +49,7 @@ async function processLineByLine() {
     }
   }
 
-  ticList.forEach((tic) => {
-    if (tic.id === 'tic:80166433') {
-      console.log(tic);
-    }
-  });
-
   console.log('Done.');
 }
 
-getTicList()//.then(processLineByLine);
+getTicList().then(processLineByLine);

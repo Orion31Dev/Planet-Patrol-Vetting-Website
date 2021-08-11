@@ -30,7 +30,7 @@ function Search(props: { inputUpdateCallback?: Function }) {
 }
 
 function validate(str: string) {
-  return str.replace(/\D/g, '');
+  return str.replace(/[^0-9()]/g, '');
 }
 
 function goTo(id: string) {

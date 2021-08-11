@@ -176,8 +176,8 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
 
 app.get('/api/all-tics', async (req: any, res: any) => {
   try {
-    let ticList = await db.partitionedList('tic', { include_docs: true });
-    res.json(ticList.rows);
+    let ticList = await getTicList();
+    res.json(ticList);
     res.status(200);
   } catch {
     res.status(500);
@@ -187,11 +187,11 @@ app.get('/api/all-tics', async (req: any, res: any) => {
 
 app.get('/api/answered-tics', async (req: any, res: any) => {
   if (req.user) {
-    let ticList = await db.partitionedList('tic', { include_docs: true });
+    let ticList = await getTicList();
     let unansweredTics = [];
     let answeredTics = [];
 
-    for (let tic of ticList.rows) {
+    for (let tic of ticList) {
       let id = tic.id.split(':')[1];
       if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push(id);
       else unansweredTics.push(id);
@@ -272,6 +272,18 @@ app.get('/*', (_req: any, res: any) => {
 });
 
 app.listen(port);
+
+async function getTicList() {
+  let pList = await db.partitionedList('tic', { include_docs: true });
+  let ticList = pList.rows;
+
+  while (ticList.length < pList.total_rows) {
+    pList = await db.partitionedList('tic', { include_docs: true, startkey: `${ticList[ticList.length - 1].id}\0` });
+    ticList = ticList.concat(pList.rows);
+  }
+
+  return ticList;
+}
 
 async function asyncForEach(array: any[], callback: Function) {
   for (let index = 0; index < array.length; index++) {
