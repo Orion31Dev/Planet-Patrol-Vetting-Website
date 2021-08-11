@@ -127,7 +127,10 @@ a {
     text-align: center;
     font-size: 0.7em;
     padding: 1.35vmin 0.2vmin;
-    word-break: break-word;
+
+    &:not(.id) {
+      word-break: break-word;
+    }
 
     a {
       color: $off-white;

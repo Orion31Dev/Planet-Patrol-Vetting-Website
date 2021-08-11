@@ -47,7 +47,7 @@ function getTics(callback: Function) {
     d.json().then((d) =>
       callback(
         d.sort((a: any, b: any) => {
-          return parseFloat(a.id.split(':')[1]) > parseFloat(b.id.split(':')[1]) ? 1 : -1;
+          return parseFloat(a.id.split(':')[1].replace('(', '.').replace(')', '')) > parseFloat(b.id.split(':')[1].replace('(', '.').replace(')', '')) ? 1 : -1;
         })
       )
     )
@@ -68,7 +68,7 @@ function createTableRow(tic: any) {
 
   return (
     <tr key={index++}>
-      <td>
+      <td className="id">
         <a href={'/tic/' + ticId}>{ticId}</a>
       </td>
       <td>

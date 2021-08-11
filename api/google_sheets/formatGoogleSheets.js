@@ -13,6 +13,8 @@ const db = cloudant.use('planet-patrol-db');
 
 let str = `1003831	https://exofop.ipac.caltech.edu/tess/target.php?id=1003831	8	2458518.203	1.651142	0.76	3007	0.30	0.49	0.98	10.6701	6.30				PC	pVshape			CP (exofop)	SPC, our pdf graph looks off in the scale	CP	TOI-564 b			PC										CP	TOI-564 b `;
 
+let ids = {};
+
 function format(line) {
   let spl = line.split('\t');
   let dispositions = {};
@@ -96,8 +98,8 @@ function format(line) {
 
   if (spl[35]) {
     dispositions['user:michiharu.hyogo77@gmail.com'] = {
-      disposition: spl[36],
-      comments: spl[37] || '',
+      disposition: spl[35],
+      comments: spl[36] || '',
     };
   }
 
@@ -126,8 +128,6 @@ async function processLineByLine() {
     input: fileStream,
     crlfDelay: Infinity,
   });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
 
   let firstLine = true;
   for await (const line of rl) {
@@ -135,14 +135,26 @@ async function processLineByLine() {
       firstLine = false;
       continue;
     }
-    // Each line in input.txt will be successively available here as `line`.
-    //console.log(format(line).dispositions);
-    db.insert(format(line));
+
+    let fmt = format(line);
+
+    if (ids[fmt._id]) {
+      fmt._id += `(${ids[fmt._id]++})`;
+    } else {
+      ids[fmt._id] = 2;
+    }
+
+    console.log('Inserting ' + fmt._id);
+
+    try {
+      await db.insert(fmt);
+    } catch {
+      console.log('Failed.');
+    }
 
     // Sleep
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 100));
   }
 }
 
 processLineByLine();
-console.log(format(str));
