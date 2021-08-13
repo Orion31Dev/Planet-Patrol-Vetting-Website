@@ -66,17 +66,11 @@ app.use(async (req: any, _res: any, next: Function) => {
   next();
 });
 
-/*
-// Cors-anywhere proxy
-const cors_proxy = require('cors-anywhere').createServer({
-  removeHeaders: ['cookie', 'cookie2'],
-  redirectSameOrigin: true,
-});
+// Get the TIC list periodically (probably won't update too much).
+let ticList: any[] = [];
+(async () => { ticList = await getTicList(); })();
+setInterval(async() => ticList = await getTicList(), 5 * 60 * 1000 /* 5 minutes */);
 
-app.get('/proxy/*', function (req: any, res: any) {
-  req.url = req.url.replace('/proxy/', '/'); // Strip "/proxy" from the front of the URL.
-  cors_proxy.emit('request', req, res);
-});*/
 
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
@@ -176,10 +170,10 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
 
 app.get('/api/all-tics', async (req: any, res: any) => {
   try {
-    let ticList = await getTicList();
     res.json(ticList);
     res.status(200);
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.status(500);
     res.json({ message: 'An error occurred.' });
   }
@@ -187,7 +181,6 @@ app.get('/api/all-tics', async (req: any, res: any) => {
 
 app.get('/api/answered-tics', async (req: any, res: any) => {
   if (req.user) {
-    let ticList = await getTicList();
     let unansweredTics = [];
     let answeredTics = [];
 
@@ -274,10 +267,12 @@ app.get('/*', (_req: any, res: any) => {
 app.listen(port);
 
 async function getTicList() {
+  await new Promise((r) => setTimeout(r, 1000)); // Prevent rate limiting
   let pList = await db.partitionedList('tic', { include_docs: true });
   let ticList = pList.rows;
 
   while (ticList.length < pList.total_rows) {
+    await new Promise((r) => setTimeout(r, 1000)); // Prevent rate limiting
     pList = await db.partitionedList('tic', { include_docs: true, startkey: `${ticList[ticList.length - 1].id}\0` });
     ticList = ticList.concat(pList.rows);
   }

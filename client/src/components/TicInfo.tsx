@@ -24,7 +24,7 @@ export type Disposition = {
 
 function TicInfo(props: { id: any; data: TicData }) {
   let [pdfs, setPDFs]: [any[], Function] = useState([]);
-  let [showPDFs, setShowPDFs] = useState(true);
+  let [showPDFs, setShowPDFs] = useState(false);
 
   useEffect(() => {
     getPDFs(props.id, setPDFs);

@@ -1,31 +1,78 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+
+const quickFillVals = ['pVshape', 'SS', 'TD', 'CO', 'Low SNR'];
 
 export default function TicInput(props: { id: any; updateFunction: Function; user: any }) {
   let [disposition, setDisposition] = useState('FP');
   let [comments, setComments] = useState('');
 
+  const commentsRef = useRef<HTMLInputElement>(null);
+
   return (
-    <div className="user-input section">
-      <select onChange={(e) => setDisposition(e.target.value)} value={disposition}>
-        <option value="FP">FP</option>
-        <option value="pFP">pFP</option>
-        <option value="PC">PC</option>
-        <option value="CP">CP</option>
-      </select>
-      <div className="input-wrapper">
-        <input type="text" onChange={(e) => setComments(e.target.value)} value={comments} />
-        <div className="label">Comments</div>
-      </div>
-      <div className="button" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, false)}>
-        Submit
-      </div>
-      {props.user.group && (
-        <div className="button group" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, true)}>
-          Submit as Group
+    <div className="section user-input">
+      <div className="no-wrap">
+        <select onChange={(e) => setDisposition(e.target.value)} value={disposition}>
+          <option value="FP">FP</option>
+          <option value="pFP">pFP</option>
+          <option value="PC">PC</option>
+          <option value="CP">CP</option>
+        </select>
+        <div className="input-wrapper">
+          <input type="text" ref={commentsRef} onChange={(e) => setComments(e.target.value)} value={comments} />
+          <div className="label">Comments</div>
         </div>
-      )}
+        <div className="button" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, false)}>
+          Submit
+        </div>
+        {props.user.group && (
+          <div className="button group" onClick={() => submitData(props.id, disposition, comments, props.updateFunction, true)}>
+            Submit as Group
+          </div>
+        )}
+      </div>
+      <table className="quick-fills"><tbody>{generateQuickFills(comments, setComments, commentsRef)}</tbody></table>
     </div>
+  );
+}
+
+function generateQuickFills(val: string, setValue: Function, commentsRef: any) {
+  let elementArr = [];
+
+  let index = 0;
+
+  while (index < quickFillVals.length) {
+    let colspan = 1;
+    if (!quickFillVals[index + 1]) colspan = 3;
+    else if (!quickFillVals[index + 2]) colspan = 2;
+
+    elementArr.push(
+      <tr key={index}>
+        {generateQuickFill(quickFillVals[index], val, setValue, commentsRef, (colspan === 2) ? 1 : colspan)}
+        {quickFillVals[index + 1] && generateQuickFill(quickFillVals[index + 1], val, setValue, commentsRef, colspan)}
+        {quickFillVals[index + 2] && generateQuickFill(quickFillVals[index + 2], val, setValue, commentsRef)}
+      </tr>
+    );
+
+    index += 3;
+  }
+
+  return elementArr;
+}
+
+function generateQuickFill(fill: string, val: string, setValue: Function, ref: any, colspan: number = 1) {
+  return (
+    <td
+      className="quick-fill"
+      key={fill}
+      onClick={() => {
+        setValue(val + fill + ', ');
+        ref.current?.focus();
+      }}
+      colSpan={colspan}
+    >
+      {fill}
+    </td>
   );
 }
 

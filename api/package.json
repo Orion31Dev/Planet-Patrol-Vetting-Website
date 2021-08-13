@@ -7,7 +7,6 @@
   "license": "MIT",
   "dependencies": {
     "@cloudant/cloudant": "^4.4.0",
-    "cors-anywhere": "^0.4.4",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "google-auth-library": "^7.3.0",

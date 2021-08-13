@@ -314,11 +314,21 @@ a {
 
   .user-input {
     text-align: center;
-    font-size: 2.75em;
+    font-size: 2.5em;
 
     position: relative;
+    flex-wrap: wrap;
 
-    flex-wrap: nowrap;
+    .no-wrap {
+      flex-wrap: nowrap;
+      position: relative;
+      text-align: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
     select {
       @include input;
@@ -343,10 +353,52 @@ a {
         white-space: nowrap;
       }
     }
+
+    .quick-fills {
+      width: 100%;
+      margin: 3vmin auto;
+      border-radius: $rounded * 0.15;
+      overflow: hidden;
+
+      table-layout: fixed; 
+
+      border-collapse: collapse;
+
+      .quick-fill {
+       // width: 33%;
+
+        text-align: center;
+        display: table-cell;
+        padding: 1.5vmin 1vmin;
+
+        background: color.adjust($dark-gray, $alpha: -.7);
+        border: .2vmin solid color.adjust($gray, $lightness: -20%);
+
+        user-select: none;
+
+        &:hover {
+          background: $darkest-gray;
+          cursor: pointer;
+        }
+      }
+
+      tr:first-child td {
+        border-top: 0;
+      }
+      tr td:first-child {
+        border-left: 0;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      tr td:last-child {
+        border-right: 0;
+      }
+    }
   }
 }
 
-table {
+table:not(.quick-fills) {
   width: 100%;
   font-size: 0.75em;
   border-collapse: collapse;
