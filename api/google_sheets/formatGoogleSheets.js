@@ -26,6 +26,8 @@ function format(line) {
     };
   }
 
+
+  // Website
   if (spl[15]) {
     dispositions['user:veselin.b.kostov@gmail.com'] = {
       disposition: spl[15],
@@ -40,6 +42,7 @@ function format(line) {
     };
   }
 
+  // Website
   if (spl[19]) {
     dispositions['user:dclaymore@gmail.com'] = {
       disposition: spl[19],
@@ -47,6 +50,7 @@ function format(line) {
     };
   }
 
+  // Website
   if (spl[21]) {
     dispositions['user:marco.z.difraia@gmail.com'] = {
       disposition: spl[21],
@@ -68,6 +72,7 @@ function format(line) {
     };
   }
 
+  // Website
   if (spl[27]) {
     dispositions['user:alineuemura@gmail.com'] = {
       disposition: spl[27],
@@ -75,6 +80,7 @@ function format(line) {
     };
   }
 
+  // Website
   if (spl[29]) {
     dispositions['user:marc.andres.carcasona@gmail.com'] = {
       disposition: spl[29],

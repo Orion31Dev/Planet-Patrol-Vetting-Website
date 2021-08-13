@@ -27,6 +27,7 @@ export default function Table(props: { query?: string }) {
             <th>Δ Tmag</th>
             <th>Group Disposition</th>
             <th>Group Comments</th>
+            <th># Disps</th>
           </tr>
           {tics
             .filter((t: any) => {
@@ -88,6 +89,7 @@ function createTableRow(tic: any) {
       <td>{tic.deltaTmag}</td>
       <td>{gd}</td>
       <td>{gc}</td>
+      <td>{Object.keys(tic.dispositions).length}</td>
     </tr>
   );
 }

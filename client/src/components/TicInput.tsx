@@ -1,7 +1,9 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 
-const quickFillVals = ['pVshape', 'SS', 'TD', 'CO', 'Low SNR'];
+const quickFillVals = ['pVshape', 'SS', 'TD', 'CO', 'Low SNR', 'FSCP', 'SPC', 'SCP',
+'OED', 'TCP', 'EB', 'SB', 'BEER', 'HPMS', 'Fla', 'NT', 'TFP', 'SPR', 'MD', 'UC', 'short-P',
+'pOcc', 'run-2min', 'WE', 'HJ', 'MSD', 'AT', 'FSOP'].sort();
 
 export default function TicInput(props: { id: any; updateFunction: Function; user: any }) {
   let [disposition, setDisposition] = useState('FP');
@@ -43,18 +45,20 @@ function generateQuickFills(val: string, setValue: Function, commentsRef: any) {
 
   while (index < quickFillVals.length) {
     let colspan = 1;
-    if (!quickFillVals[index + 1]) colspan = 3;
+    if (!quickFillVals[index + 1]) colspan = 4;
     else if (!quickFillVals[index + 2]) colspan = 2;
+    else if (!quickFillVals[index + 3]) colspan = 2;
 
     elementArr.push(
       <tr key={index}>
-        {generateQuickFill(quickFillVals[index], val, setValue, commentsRef, (colspan === 2) ? 1 : colspan)}
-        {quickFillVals[index + 1] && generateQuickFill(quickFillVals[index + 1], val, setValue, commentsRef, colspan)}
-        {quickFillVals[index + 2] && generateQuickFill(quickFillVals[index + 2], val, setValue, commentsRef)}
+        {generateQuickFill(quickFillVals[index], val, setValue, commentsRef, (quickFillVals[index + 2] && colspan === 2) ? 1 : colspan)}
+        {quickFillVals[index + 1] && generateQuickFill(quickFillVals[index + 1], val, setValue, commentsRef, (quickFillVals[index + 2] && colspan === 2) ? 1 : colspan)}
+        {quickFillVals[index + 2] && generateQuickFill(quickFillVals[index + 2], val, setValue, commentsRef, colspan)}
+        {quickFillVals[index + 3] && generateQuickFill(quickFillVals[index + 3], val, setValue, commentsRef)}
       </tr>
     );
 
-    index += 3;
+    index += 4;
   }
 
   return elementArr;
