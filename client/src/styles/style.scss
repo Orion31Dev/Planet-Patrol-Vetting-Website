@@ -104,7 +104,7 @@ a {
   }
 }
 
-.table {
+.section.table { // add .section for importance
   margin: 5vmin $horizontal-margin * 0.15;
 
   .title {
@@ -314,7 +314,7 @@ a {
 
   .user-input {
     text-align: center;
-    font-size: 2.5em;
+    font-size: 2.75em;
 
     position: relative;
     flex-wrap: wrap;
@@ -398,11 +398,14 @@ a {
   }
 }
 
+
 table:not(.quick-fills) {
   width: 100%;
   font-size: 0.75em;
   border-collapse: collapse;
+  table-layout: fixed;  
 
+  
   tr {
     margin: 0;
 
