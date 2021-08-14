@@ -172,8 +172,7 @@ app.get('/api/all-tics', async (req: any, res: any) => {
   try {
     res.json(ticList);
     res.status(200);
-  } catch (e) {
-    console.log(e);
+  } catch {
     res.status(500);
     res.json({ message: 'An error occurred.' });
   }
@@ -186,8 +185,8 @@ app.get('/api/answered-tics', async (req: any, res: any) => {
 
     for (let tic of ticList) {
       let id = tic.id.split(':')[1];
-      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push(id);
-      else unansweredTics.push(id);
+      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push({id, length: Object.keys(tic.dispositions).length});
+      else unansweredTics.push({id, length: Object.keys(tic.doc.dispositions).length});
     }
 
     res.json({ unanswered: unansweredTics, answered: answeredTics });

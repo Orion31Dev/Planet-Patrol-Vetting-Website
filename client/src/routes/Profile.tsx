@@ -6,13 +6,13 @@ import Message404 from '../components/Message404';
 
 function Profile() {
   let [user, setUser]: [any, Function] = useState(null);
-  let [answeredTics, setAnsweredTics] = useState([]);
-  let [unansweredTics, setUnansweredTics] = useState([]);
+  let [answeredTics, setAnsweredTics]: [any[], Function] = useState([]);
+  let [unansweredTics, setUnansweredTics]: [any[], Function] = useState([]);
 
   useEffect(() => {
     getAnsweredTics((data: any) => {
       setAnsweredTics(data.answered);
-      setUnansweredTics(data.unanswered);
+      setUnansweredTics(data.unanswered.filter((t: any) => t.length < 3));
     });
   }, []);
 
@@ -37,14 +37,14 @@ function Profile() {
         {unansweredTics.length > 0 && (
           <div className="tic-list">
             <div className="title">These TICs need your attention:</div>
-            <div className="tics">{unansweredTics.map((tic) => ticLink(tic, false))}</div>
+            <div className="tics">{unansweredTics.map((tic) => ticLink(tic.id, false))}</div>
           </div>
         )}
         <div className="tic-list">
           <div className="title">
             {answeredTics.length > 0 ? 'You have responded to these TICs:' : 'You have not responded to any TICs.'}
           </div>
-          <div className="tics">{answeredTics.map((tic) => ticLink(tic, true))}</div>
+          <div className="tics">{answeredTics.map((tic) => ticLink(tic.id, true))}</div>
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@ function Profile() {
 let index = 0;
 function ticLink(ticId: string, answered: boolean) {
   return (
-    <a href={`/tic/${ticId}`} key={index++} className={"tic-link" + (answered ? "" : " unanswered")}>
+    <a href={`/tic/${ticId}`} key={index++} className={'tic-link' + (answered ? '' : ' unanswered')}>
       {ticId}
     </a>
   );
