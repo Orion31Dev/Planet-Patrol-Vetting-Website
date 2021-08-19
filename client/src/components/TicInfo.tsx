@@ -38,7 +38,7 @@ function TicInfo(props: { id: any; data: TicData }) {
         TIC <div className="id">{props.id}</div>
       </div>
       <div className="exofop">
-        <a href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a>
+        <a target="_blank" rel="noreferrer" href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a>
       </div>
       <div className="stats">
         <div className="stat">

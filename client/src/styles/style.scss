@@ -104,11 +104,42 @@ a {
   }
 }
 
-.section.table { // add .section for importance
+.section.table {
+  // add .section for importance
   margin: 5vmin $horizontal-margin * 0.15;
 
   .title {
     @include mini-title;
+    float: left;
+
+    max-width: 50%;
+  }
+
+  .sort-by {
+    @include mini-title;
+    text-align: right;
+    float: right;
+    max-width: 50%;
+
+    color: $light-gray;
+
+    .label {
+      color: $off-white;
+      display: inline-block;
+    }
+
+    span {
+      color: $gray;
+      cursor: pointer;
+
+      &:hover {
+        color: $off-white;
+      }
+
+      &.selected {
+        color: $gold;
+      }
+    }
   }
 
   table {
@@ -360,20 +391,20 @@ a {
       border-radius: $rounded * 0.15;
       overflow: hidden;
 
-      table-layout: fixed; 
+      table-layout: fixed;
 
       border-collapse: collapse;
 
       .quick-fill {
-        font-size: .7em;
-       // width: 33%;
+        font-size: 0.7em;
+        // width: 33%;
 
         text-align: center;
         display: table-cell;
         padding: 1.5vmin 1vmin;
 
-        background: color.adjust($dark-gray, $alpha: -.7);
-        border: .2vmin solid color.adjust($gray, $lightness: -20%);
+        background: color.adjust($dark-gray, $alpha: -0.7);
+        border: 0.2vmin solid color.adjust($gray, $lightness: -20%);
 
         user-select: none;
 
@@ -399,14 +430,12 @@ a {
   }
 }
 
-
 table:not(.quick-fills) {
   width: 100%;
   font-size: 0.75em;
   border-collapse: collapse;
-  table-layout: fixed;  
+  table-layout: fixed;
 
-  
   tr {
     margin: 0;
 
