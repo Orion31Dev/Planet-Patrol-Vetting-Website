@@ -106,7 +106,7 @@ a {
 
 .section.table {
   // add .section for importance
-  margin: 5vmin $horizontal-margin * 0.15;
+  margin: 5vmin $horizontal-margin * 0.05;
 
   .title {
     @include mini-title;
@@ -156,7 +156,7 @@ a {
   th,
   td {
     text-align: center;
-    font-size: 0.7em;
+    font-size: 0.67em;
     padding: 1.35vmin 0.2vmin;
 
     &:not(.id) {
