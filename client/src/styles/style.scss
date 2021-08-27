@@ -179,7 +179,7 @@ a {
 }
 
 .search {
-  font-size: 3.5em;
+  font-size: 3em;
   .title {
     font-size: 1em;
   }
@@ -188,13 +188,8 @@ a {
     margin-left: 0.5em;
 
     input {
-      width: 6.5em;
+      width: 10.5em;
     }
-  }
-
-  .btn-search {
-    margin-left: 0.5em;
-    @include button($accent-blue);
   }
 }
 

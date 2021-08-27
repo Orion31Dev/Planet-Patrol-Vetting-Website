@@ -15,26 +15,19 @@ function Search(props: { inputUpdateCallback?: Function }) {
         <input
           type="text"
           className="id-search"
-          placeholder={'1870990135'}
+          placeholder={'pVshape, BEER'}
           value={idVal}
-          maxLength={10}
+          maxLength={20}
           onChange={(e) => setIdVal(validate(e.target.value))}
         />
-        <div className="label">TIC ID</div>
-      </div>
-      <div className="btn-search" onClick={() => goTo(idVal)}>
-        Go
+        <div className="label">TIC ID / Dispositions</div>
       </div>
     </div>
   );
 }
 
 function validate(str: string) {
-  return str.replace(/[^0-9()]/g, '');
+  return str;
+  //return str.replace(/[^0-9()]/g, '');
 }
-
-function goTo(id: string) {
-  window.location.href = `/tic/${id}`;
-}
-
 export default Search;

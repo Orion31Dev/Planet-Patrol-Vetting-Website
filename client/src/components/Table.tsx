@@ -67,8 +67,23 @@ export default function Table(props: { query?: string }) {
           </tr>
           {sort(tics, sortDir)
             .filter((t: any) => {
-              if (props.query) return t.id.replace('tic:', '').includes(props.query);
-              else return true;
+              if (props.query) {
+                if (
+                  props.query.split(', ').every((d) => {
+                    if (
+                      Object.keys(t.doc.dispositions).some((k) => {
+                        return t.doc.dispositions[k].disposition.includes(d) || t.doc.dispositions[k].comments.includes(d);
+                      })
+                    )
+                      return true;
+                    return false;
+                  })
+                )
+                  return true;
+
+                if (t.id.replace('tic:', '').includes(props.query)) return true;
+                return false;
+              } else return true;
             })
             .map((t: any) => createTableRow(t.doc))}
         </tbody>
