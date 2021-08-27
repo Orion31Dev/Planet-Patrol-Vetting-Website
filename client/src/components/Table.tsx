@@ -163,7 +163,7 @@ function createTableRow(tic: any) {
         <a href={'/tic/' + ticId}>{ticId}</a>
       </td>
       <td>
-        <a className="gray" href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`}>
+        <a className="gray" target="_blank" rel="noreferrer" href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`}>
           [Link]
         </a>
       </td>
