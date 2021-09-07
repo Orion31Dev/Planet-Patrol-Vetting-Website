@@ -185,7 +185,7 @@ app.get('/api/answered-tics', async (req: any, res: any) => {
 
     for (let tic of ticList) {
       let id = tic.id.split(':')[1];
-      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push({id, length: Object.keys(tic.dispositions).length});
+      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push({id, length: Object.keys(tic.doc.dispositions).length});
       else unansweredTics.push({id, length: Object.keys(tic.doc.dispositions).length});
     }
 

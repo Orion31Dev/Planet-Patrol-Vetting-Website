@@ -29,7 +29,7 @@ async function exportTsv() {
 
   fs.appendFile(
     fileName,
-    'TIC ID	ExoFOP-TESS	Sectors	Epoch	Period	Duration	Depth	Depth	Rtranister	Rstar	Tmag	Delta Tmag	Group Disposition	Reason for Group Disposition	Group Comments	Disposition (VK)	Comments (VK)	Disposition (LC)	Comments (LC)	Disposition (HDL)	Comments (HDL)	Disposition (MZDF)	Comments (MZDF)	Disposition (Julien)	Comments (Julien)	Disposition (JY)	Comments (JY)	Disposition (AF)	Comments (AF)	Disposition(MAC)	Comments(MAC)	Disposition(RI)	Comments(RI)	Disposition(FG)	Comments(FG)	Disposition(MH)	Comments(MH)',
+    'TIC ID	ExoFOP-TESS	Sectors	Epoch	Period	Duration	Depth	Depth	Rtranister	Rstar	Tmag	Delta Tmag	Group Disposition	Reason for Group Disposition	Group Comments (Unused)	Disposition (VK)	Comments (VK)	Disposition (LC)	Comments (LC)	Disposition (HDL)	Comments (HDL)	Disposition (MZDF)	Comments (MZDF)	Disposition (Julien)	Comments (Julien)	Disposition (JY)	Comments (JY)	Disposition (AF)	Comments (AF)	Disposition(MAC)	Comments(MAC)	Disposition(RI)	Comments(RI)	Disposition(FG)	Comments(FG)	Disposition(MH)	Comments(MH)',
     (err) => {
       if (err) throw err;
     }
@@ -93,8 +93,6 @@ function formatRow(row, spl) {
     `${spl[18] || ''}\t` +
     `${row.dispositions['user:dclaymore@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:dclaymore@gmail.com']?.comments || ''}\t` +
-    `${row.dispositions['user:marco.z.difraia@gmail.com']?.disposition || ''}\t` +
-    `${row.dispositions['user:marco.z.difraia@gmail.com']?.comments || ''}\t` +
     `${row.dispositions['user:marco.z.difraia@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:marco.z.difraia@gmail.com']?.comments || ''}\t` +
     `${spl[23] || ''}\t` + // Julien
