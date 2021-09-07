@@ -510,7 +510,7 @@ table:not(.quick-fills) {
       @include button($gray);
 
       &.unanswered {
-        @include button($off-white);
+        @include button($accent-light-blue);
       }
 
       font-size: 0.8em;
