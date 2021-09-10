@@ -116,7 +116,7 @@ function formatDate(m) {
   return (
     m.getUTCFullYear() +
     '-' +
-    ('0' + (m.getUTCMonth() + 1)).slice(-2) +
+    ('0' + (m.getUTCMonth() + 1)).slice(-2) + 
     '-' +
     ('0' + m.getUTCDate()).slice(-2) +
     '@' +
@@ -128,4 +128,4 @@ function formatDate(m) {
   );
 }
 
-getTicList().then(exportTsv);
+getTicList().then(() => gs.initAuth().then(gs.downloadSpreadsheet().then(exportTsv)));

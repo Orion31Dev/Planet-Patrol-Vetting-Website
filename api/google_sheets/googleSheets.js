@@ -10,11 +10,13 @@ const TOKEN_PATH = './api/google_sheets/token.json';
 client = null;
 
 // Load client secrets from a local file.
-function initAuth(callback) {
-  fs.readFile('./api/google_sheets/credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Google Sheets API.
-    authorize(JSON.parse(content), callback);
+function initAuth() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('./api/google_sheets/credentials.json', (err, content) => {
+      if (err) reject(err);
+      // Authorize a client with credentials, then call the Google Sheets API.
+      authorize(JSON.parse(content), resolve);
+    });
   });
 }
 
@@ -70,51 +72,54 @@ function getNewToken(oAuth2Client, callback) {
 
 // download spreadsheet as tsv file
 function downloadSpreadsheet() {
-  const filePath = './api/google_sheets/table.tsv';
-  const link =
-    'https://docs.google.com/spreadsheets/d/1vI_ho-gpw4xq_VTRyTMB3DdNAytWdckrDANbJ1BEcMU/export?exportFormat=tsv&amp;gid=78752082';
-  // delete the file if it exists
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-  }
+  return new Promise((resolve, reject) => {
+    const filePath = './api/google_sheets/table.tsv';
+    const link =
+      'https://docs.google.com/spreadsheets/d/1vI_ho-gpw4xq_VTRyTMB3DdNAytWdckrDANbJ1BEcMU/export?exportFormat=tsv&amp;gid=78752082';
+    // delete the file if it exists
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
 
-  const file = fs.createWriteStream(filePath);
-  request(
-    {
-      url: link,
-      followAllRedirects: true,
-    },
-    function (err, res, body) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-
-      lines = body.split('\n');
-
-      let index = 0;
-      let keyLine = '';
-
-      for (const line of lines) {
-        if (line.startsWith('TIC ID')) {
-          keyLine = line;
-          continue;
+    const file = fs.createWriteStream(filePath);
+    request(
+      {
+        url: link,
+        followAllRedirects: true,
+      },
+      function (err, res, body) {
+        if (err) {
+          reject(err);
         }
 
-        // if line starts with a number
-        if (line[0].match(/^\d+$/)) break;
-        index++;
+        lines = body.split('\n');
+
+        let index = 0;
+        let keyLine = '';
+
+        for (const line of lines) {
+          if (line.startsWith('TIC ID')) {
+            keyLine = line;
+            continue;
+          }
+
+          // if line starts with a number
+          if (line[0].match(/^\d+$/)) break;
+          index++;
+        }
+
+        // remove index number of lines
+        lines.splice(0, index + 1);
+        lines.unshift(keyLine);
+
+        file.write(lines.join('\n'));
+        file.end();
+
+        console.log('Done downloading spreadsheet.');
+        resolve();
       }
-
-      // remove index number of lines
-      lines.splice(0, index + 1);
-      lines.unshift(keyLine);
-
-      file.write(lines.join('\n'));
-      file.end();
-    });
+    );
+  });
 }
 
-module.exports = [initAuth, downloadSpreadsheet];
-
-initAuth(downloadSpreadsheet);
+module.exports = { initAuth, downloadSpreadsheet };

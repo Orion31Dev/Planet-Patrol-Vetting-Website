@@ -1,4 +1,5 @@
 require('dotenv').config();
+const gs = require('./googleSheets');
 
 const fs = require('fs');
 const readline = require('readline');
@@ -52,4 +53,4 @@ async function processLineByLine() {
   console.log('Done.');
 }
 
-getTicList().then(processLineByLine);
+getTicList().then(() => gs.initAuth().then(gs.downloadSpreadsheet().then(processLineByLine)));
