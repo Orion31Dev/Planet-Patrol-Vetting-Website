@@ -25,4 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 *.tsv
-!table.tsv
+
+credentials.json
+token.json

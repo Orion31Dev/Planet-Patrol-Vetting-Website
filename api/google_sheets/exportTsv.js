@@ -75,16 +75,16 @@ function formatRow(row, spl) {
   return (
     `\n${row._id.split(':')[1]}\t` +
     `https://exofop.ipac.caltech.edu/tess/target.php?id=${row._id.split(':')[1]}\t` +
-    `${row.sectors}\t` +
-    `${row.epoch}\t` +
-    `${row.period}\t` +
-    `${row.duration}\t` +
-    `${row.depth}\t` +
-    `${row.depthPercent}\t` +
-    `${row.rTranister}\t` +
-    `${row.rStar}\t` +
-    `${row.tmag}\t` +
-    `${row.deltaTmag}\t` +
+    `${spl[2]}\t` +
+    `${spl[3]}\t` +
+    `${spl[4]}\t` +
+    `${spl[5]}\t` +
+    `${spl[6]}\t` +
+    `${spl[7]}\t` +
+    `${spl[8]}\t` +
+    `${spl[9]}\t` +
+    `${spl[10]}\t` +
+    `${spl[11]}\t` +
     `${row.dispositions['user:group']?.disposition || ''}\t` +
     `${row.dispositions['user:group']?.comments || ''}\t\t` + // row 14, "Group Comments," is unused
     `${row.dispositions['veselin.b.kostov@gmail.com']?.disposition || ''}\t` +

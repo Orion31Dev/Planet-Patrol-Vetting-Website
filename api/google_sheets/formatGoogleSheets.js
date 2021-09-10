@@ -159,7 +159,7 @@ async function processLineByLine() {
     }
 
     // Sleep
-    await new Promise((r) => setTimeout(r, 100));
+    // await new Promise((r) => setTimeout(r, 100));
   }
 }
 
