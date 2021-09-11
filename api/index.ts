@@ -71,6 +71,11 @@ app.use(async (req: any, _res: any, next: Function) => {
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
   const { token } = req.body;
+  
+  if (!token) {
+    res.status(400).send('No token provided.');
+    return;
+  }
 
   const ticket = await client.verifyIdToken({
     idToken: token,
