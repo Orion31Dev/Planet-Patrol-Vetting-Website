@@ -67,10 +67,6 @@ app.use(async (req: any, _res: any, next: Function) => {
 });
 
 // Get the TIC list periodically (probably won't update too much).
-let ticList: any[] = [];
-(async () => { ticList = await getTicList(); })();
-setInterval(async() => ticList = await getTicList(), 5 * 60 * 1000 /* 5 minutes */);
-
 
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
@@ -185,8 +181,9 @@ app.get('/api/answered-tics', async (req: any, res: any) => {
 
     for (let tic of ticList) {
       let id = tic.id.split(':')[1];
-      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId]) answeredTics.push({id, length: Object.keys(tic.doc.dispositions).length});
-      else unansweredTics.push({id, length: Object.keys(tic.doc.dispositions).length});
+      if (tic.doc.dispositions && tic.doc.dispositions[req.session.userId])
+        answeredTics.push({ id, length: Object.keys(tic.doc.dispositions).length });
+      else unansweredTics.push({ id, length: Object.keys(tic.doc.dispositions).length });
     }
 
     res.json({ unanswered: unansweredTics, answered: answeredTics });
@@ -266,18 +263,33 @@ app.get('/*', (_req: any, res: any) => {
 app.listen(port);
 
 async function getTicList() {
-  await new Promise((r) => setTimeout(r, 1000)); // Prevent rate limiting
-  let pList = await db.partitionedList('tic', { include_docs: true });
-  let ticList = pList.rows;
+  let newTicList: any[] = [];
+  let pList: any = {};
 
-  while (ticList.length < pList.total_rows) {
-    await new Promise((r) => setTimeout(r, 1000)); // Prevent rate limiting
-    pList = await db.partitionedList('tic', { include_docs: true, startkey: `${ticList[ticList.length - 1].id}\0` });
-    ticList = ticList.concat(pList.rows);
-  }
+  do {
+    try {
+      await new Promise((r) => setTimeout(r, 1000)); // Prevent rate limiting
+      let startKey = newTicList[newTicList.length - 1]?.id || null;
 
+      if (startKey) pList = await db.partitionedList('tic', { include_docs: true, startkey: `${startKey}\0` });
+      else pList = await db.partitionedList('tic', { include_docs: true });
+      newTicList = newTicList.concat(pList.rows);
+    } catch (e) {
+      console.error(e);
+      console.error('getTicList failed, retrying in 5 seconds.');
+      setTimeout(getTicList, 5000);
+      return;
+    }
+  } while (newTicList.length < pList.total_rows);
+
+  ticList = newTicList;
+  console.log('Successfully fetched ticList.');
   return ticList;
 }
+
+let ticList: any[] = [];
+getTicList();
+setInterval(getTicList, 5 * 60 * 1000 /* 5 minutes */);
 
 async function asyncForEach(array: any[], callback: Function) {
   for (let index = 0; index < array.length; index++) {

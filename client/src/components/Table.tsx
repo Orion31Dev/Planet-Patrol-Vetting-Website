@@ -8,11 +8,17 @@ enum SortDirection {
 
 export default function Table(props: { query?: string }) {
   let [tics, setTics] = useState([]);
+  let [fail, setFail] = useState(false);
   let [sortDir, setSortDir] = useState(SortDirection.ID);
 
   useEffect(() => {
-    getTics(setTics);
+    getTics((d: any) => {
+      setTics(d);
+      if (d.length < 1) setFail(true);
+    });
   }, []);
+
+  if (fail) return getFailMessage();
 
   return (
     <div className="section table">
@@ -132,7 +138,7 @@ function getTics(callback: Function) {
   fetch('/api/all-tics', {
     method: 'GET',
   }).then((d) =>
-    d.json().then((d) =>
+    d.json().then((d) => {
       callback(
         d.sort((a: any, b: any) => {
           return parseFloat(a.id.split(':')[1].replace('(', '.').replace(')', '')) >
@@ -140,8 +146,8 @@ function getTics(callback: Function) {
             ? 1
             : -1;
         })
-      )
-    )
+      );
+    })
   );
 }
 
@@ -181,5 +187,21 @@ function createTableRow(tic: any) {
       <td>{gc}</td>
       <td>{Object.keys(tic.dispositions).length}</td>
     </tr>
+  );
+}
+
+function getFailMessage() {
+  return (
+    <div className="section table fail">
+      <div className="title">Failed to load TICs.</div>
+      <div className="msg">Try waiting for a few seconds and refreshing the page.</div>
+      <div className="msg">
+        If this problem persists, contact&nbsp;
+        <a target="_blank" rel="noreferrer" href="mailto:planetpatrolweb@gmail.com">
+          the developers
+        </a>
+        .
+      </div>
+    </div>
   );
 }

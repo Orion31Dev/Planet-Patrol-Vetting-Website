@@ -108,11 +108,29 @@ a {
   // add .section for importance
   margin: 5vmin $horizontal-margin * 0.05;
 
-  .title {
+  &:not(.fail) .title {
     @include mini-title;
     float: left;
 
     max-width: 50%;
+  }
+
+  &.fail {
+    display: block;
+    margin-top: 20vmin;
+
+    .title {
+      display: block;
+      font-weight: $font-title;
+      text-align: center;
+    }
+
+    .msg {
+      a {
+        color: $accent-light-blue;
+      }
+      text-align: center;
+    }
   }
 
   .sort-by {
