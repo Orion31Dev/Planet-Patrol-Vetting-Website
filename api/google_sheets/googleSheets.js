@@ -1,11 +1,15 @@
 const fs = require('fs');
+const path = require('path')
 const request = require('request');
 const readline = require('readline');
 const { google } = require('googleapis');
+const { spawn } = require('child_process');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = './api/google_sheets/token.json';
+
+const SPREADSHEET_ID = '1vI_ho-gpw4xq_VTRyTMB3DdNAytWdckrDANbJ1BEcMU';
 
 client = null;
 
@@ -60,6 +64,7 @@ function getNewToken(oAuth2Client, callback) {
     oAuth2Client.getToken(code, (err, token) => {
       if (err) return console.error('Error while trying to retrieve access token', err);
       oAuth2Client.setCredentials(token);
+      client = oAuth2Client;
       // Store the token to disk for later program executions
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
         if (err) return console.error(err);
@@ -74,8 +79,7 @@ function getNewToken(oAuth2Client, callback) {
 function downloadSpreadsheet() {
   return new Promise((resolve, reject) => {
     const filePath = './api/google_sheets/table.tsv';
-    const link =
-      'https://docs.google.com/spreadsheets/d/1vI_ho-gpw4xq_VTRyTMB3DdNAytWdckrDANbJ1BEcMU/export?exportFormat=tsv&amp;gid=78752082';
+    const link = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?exportFormat=tsv&amp;gid=78752082`;
     // delete the file if it exists
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
@@ -122,4 +126,18 @@ function downloadSpreadsheet() {
   });
 }
 
-module.exports = { initAuth, downloadSpreadsheet };
+// Upload tsv file to google sheets
+function uploadTsv(filePath) {
+  console.log('Uploading ' + filePath);
+  const py = spawn(path.join(__dirname, '/python/env/Scripts/python'), [path.join(__dirname, '/python/uploadSheet.py'), filePath]);
+
+  py.stdout.on('data', function (data) {
+    console.log(data.toString());
+  }); 
+  
+  py.stderr.on('data', function (data) {
+    console.log(data.toString());
+  });
+}
+
+module.exports = { initAuth, downloadSpreadsheet, uploadTsv };

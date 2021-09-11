@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const fs = require('fs');
 const readline = require('readline');
+const gs = require('./googleSheets');
+const path = require('path');
 
 // Cloudant instance creation (lowercase c for instance)
 const Cloudant = require('@cloudant/cloudant');
@@ -25,7 +27,7 @@ async function getTicList() {
 }
 
 async function exportTsv() {
-  let fileName = `./api/google_sheets/${formatDate(new Date())}mixed.tsv`;
+  let fileName = path.join(__dirname, `/${formatDate(new Date())}mixed.tsv`);
 
   fs.appendFile(
     fileName,
@@ -35,7 +37,7 @@ async function exportTsv() {
     }
   );
 
-  const fileStream = fs.createReadStream('./api/google_sheets/table.tsv');
+  const fileStream = fs.createReadStream(path.join(__dirname, '/table.tsv'));
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -64,6 +66,7 @@ async function exportTsv() {
   }
 
   console.log('Exported ' + fileName);
+  return fileName;
 }
 
 // TIC ID,ExoFOP-TESS,Sectors,Epoch,Period,Duration,Depth,Depth,Rtranister,Rstar,Tmag,Delta Tmag,Group Disposition,Reason for Group Disposition,Group Comments,Disposition (VK),Comments (VK),Disposition (LC),Comments (LC),Disposition (HDL),Comments (HDL),Disposition (MZDF),Comments (MZDF),Disposition (Julien),Comments (Julien),Disposition (JY),Comments (JY),Disposition (AF),Comments (AF),Disposition(MAC),Comments(MAC),Disposition(RI),Comments(RI),Disposition(FG),Comments(FG),Disposition(MH),Comments(MH)
@@ -87,8 +90,8 @@ function formatRow(row, spl) {
     `${spl[11]}\t` +
     `${row.dispositions['user:group']?.disposition || ''}\t` +
     `${row.dispositions['user:group']?.comments || ''}\t\t` + // row 14, "Group Comments," is unused
-    `${row.dispositions['veselin.b.kostov@gmail.com']?.disposition || ''}\t` +
-    `${row.dispositions['veselin.b.kostov@gmail.com']?.comments || ''}\t` +
+    `${row.dispositions['user:veselin.b.kostov@gmail.com']?.disposition || ''}\t` +
+    `${row.dispositions['user:veselin.b.kostov@gmail.com']?.comments || ''}\t` +
     `${spl[17] || ''}\t` + // Luca
     `${spl[18] || ''}\t` +
     `${row.dispositions['user:dclaymore@gmail.com']?.disposition || ''}\t` +
@@ -128,4 +131,4 @@ function formatDate(m) {
   );
 }
 
-getTicList().then(() => gs.initAuth().then(gs.downloadSpreadsheet().then(exportTsv)));
+getTicList().then(() => gs.initAuth().then(() => gs.downloadSpreadsheet().then(() => exportTsv().then(f => gs.uploadTsv(f)))));
