@@ -35,7 +35,7 @@ const INDEX_FILE = path.join(__dirname, '../dist/index.html');
 app.use(express.static(DIST_DIR));
 app.use(express.json());
 
-var session = require('express-session');
+var session = require('cookie-session');
 
 // Express session settings
 let sess = {
