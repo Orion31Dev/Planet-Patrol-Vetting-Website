@@ -20,31 +20,30 @@ function format(line) {
   let dispositions = {};
 
   if (spl[12]) {
-    dispositions['user:group'] = {
+    dispositions['user:paper'] = {
       disposition: spl[12],
       comments: spl[13] || '',
     };
   }
 
-
-  // Website
-  if (spl[15]) {
-    dispositions['user:veselin.b.kostov@gmail.com'] = {
-      disposition: spl[15],
-      comments: spl[16] || '',
+ if (spl[14]) {
+    dispositions['user:group'] = {
+      disposition: spl[14],
+      comments: spl[15] || '',
     };
   }
 
+
+  // Website
   if (spl[17]) {
-    dispositions['user:lucacacciapuoti.lc@gmail.com'] = {
+    dispositions['user:veselin.b.kostov@gmail.com'] = {
       disposition: spl[17],
       comments: spl[18] || '',
     };
   }
 
-  // Website
   if (spl[19]) {
-    dispositions['user:dclaymore@gmail.com'] = {
+    dispositions['user:lucacacciapuoti.lc@gmail.com'] = {
       disposition: spl[19],
       comments: spl[20] || '',
     };
@@ -52,29 +51,30 @@ function format(line) {
 
   // Website
   if (spl[21]) {
-    dispositions['user:marco.z.difraia@gmail.com'] = {
+    dispositions['user:dclaymore@gmail.com'] = {
       disposition: spl[21],
       comments: spl[22] || '',
     };
   }
 
+
+  // Website
   if (spl[23]) {
-    dispositions['user:julien.delambilly@gmail.com'] = {
+    dispositions['user:marco.z.difraia@gmail.com'] = {
       disposition: spl[23],
       comments: spl[24] || '',
     };
   }
 
   if (spl[25]) {
-    dispositions['user:john.yablonsky29@gmail.com'] = {
+    dispositions['user:julien.delambilly@gmail.com'] = {
       disposition: spl[25],
       comments: spl[26] || '',
     };
   }
 
-  // Website
   if (spl[27]) {
-    dispositions['user:alineuemura@gmail.com'] = {
+    dispositions['user:john.yablonsky29@gmail.com'] = {
       disposition: spl[27],
       comments: spl[28] || '',
     };
@@ -82,30 +82,38 @@ function format(line) {
 
   // Website
   if (spl[29]) {
-    dispositions['user:marc.andres.carcasona@gmail.com'] = {
+    dispositions['user:alineuemura@gmail.com'] = {
       disposition: spl[29],
       comments: spl[30] || '',
     };
   }
 
+  // Website
   if (spl[31]) {
-    dispositions['user:riccardo'] = {
+    dispositions['user:marc.andres.carcasona@gmail.com'] = {
       disposition: spl[31],
       comments: spl[32] || '',
     };
   }
 
   if (spl[33]) {
-    dispositions['user:francesco'] = {
+    dispositions['user:riccardo'] = {
       disposition: spl[33],
       comments: spl[34] || '',
     };
   }
 
   if (spl[35]) {
-    dispositions['user:michiharu.hyogo77@gmail.com'] = {
+    dispositions['user:francesco'] = {
       disposition: spl[35],
       comments: spl[36] || '',
+    };
+  }
+
+  if (spl[37]) {
+    dispositions['user:michiharu.hyogo77@gmail.com'] = {
+      disposition: spl[37],
+      comments: spl[38] || '',
     };
   }
 

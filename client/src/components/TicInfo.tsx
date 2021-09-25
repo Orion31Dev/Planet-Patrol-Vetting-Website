@@ -17,6 +17,7 @@ export type TicData = {
 };
 
 export type Disposition = {
+  _id: string;
   name: string;
   disposition: string;
   comments: string;
@@ -155,8 +156,9 @@ function generateDispositions(dispositions: Disposition[]) {
 
   let key = 0;
   return dispositions.map((d) => {
+    console.log(d);
     return (
-      <tr key={key++} className={d.name === 'Group' ? 'group' : ''}>
+      <tr key={key++} className={(d._id === 'user:group' ? 'group' : '') + (d.name === 'user:paper' ? 'paper' : '')}>
         <td>{d.name}</td>
         <td>{d.disposition}</td>
         <td>{d.comments}</td>

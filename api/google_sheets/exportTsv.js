@@ -31,7 +31,7 @@ async function exportTsv() {
 
   fs.appendFile(
     fileName,
-    'TIC ID	ExoFOP-TESS	Sectors	Epoch	Period	Duration	Depth	Depth	Rtranister	Rstar	Tmag	Delta Tmag	Group Disposition	Reason for Group Disposition	Group Comments (Unused)	Disposition (VK)	Comments (VK)	Disposition (LC)	Comments (LC)	Disposition (HDL)	Comments (HDL)	Disposition (MZDF)	Comments (MZDF)	Disposition (Julien)	Comments (Julien)	Disposition (JY)	Comments (JY)	Disposition (AF)	Comments (AF)	Disposition(MAC)	Comments(MAC)	Disposition(RI)	Comments(RI)	Disposition(FG)	Comments(FG)	Disposition(MH)	Comments(MH)',
+    'TIC ID	ExoFOP-TESS	Sectors	Epoch	Period	Duration	Depth	Depth	Rtranister	Rstar	Tmag	Delta Tmag	Paper Disp	Paper Comm	Group Disposition	Reason for Group Disposition	Group Comments (Unused)	Disposition (VK)	Comments (VK)	Disposition (LC)	Comments (LC)	Disposition (HDL)	Comments (HDL)	Disposition (MZDF)	Comments (MZDF)	Disposition (Julien)	Comments (Julien)	Disposition (JY)	Comments (JY)	Disposition (AF)	Comments (AF)	Disposition(MAC)	Comments(MAC)	Disposition(RI)	Comments(RI)	Disposition(FG)	Comments(FG)	Disposition(MH)	Comments(MH)',
     (err) => {
       if (err) throw err;
     }
@@ -88,28 +88,30 @@ function formatRow(row, spl) {
     `${spl[9]}\t` +
     `${spl[10]}\t` +
     `${spl[11]}\t` +
+    `${spl[12]}\t` +
+    `${spl[13]}\t` +
     `${row.dispositions['user:group']?.disposition || ''}\t` +
     `${row.dispositions['user:group']?.comments || ''}\t\t` + // row 14, "Group Comments," is unused
     `${row.dispositions['user:veselin.b.kostov@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:veselin.b.kostov@gmail.com']?.comments || ''}\t` +
-    `${spl[17] || ''}\t` + // Luca
-    `${spl[18] || ''}\t` +
+    `${spl[19] || ''}\t` + // Luca
+    `${spl[20] || ''}\t` +
     `${row.dispositions['user:dclaymore@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:dclaymore@gmail.com']?.comments || ''}\t` +
     `${row.dispositions['user:marco.z.difraia@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:marco.z.difraia@gmail.com']?.comments || ''}\t` +
-    `${spl[23] || ''}\t` + // Julien
-    `${spl[24] || ''}\t` +
-    `${spl[25] || ''}\t` + // John
+    `${spl[25] || ''}\t` + // Julien
     `${spl[26] || ''}\t` +
+    `${spl[27] || ''}\t` + // John
+    `${spl[28] || ''}\t` +
     `${row.dispositions['user:alineuemura@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:alineuemura@gmail.com']?.comments || ''}\t` +
     `${row.dispositions['user:marc.andres.carcasona@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:marc.andres.carcasona@gmail.com']?.comments || ''}\t` +
-    `${spl[31] || ''}\t` + // Riccardo
-    `${spl[32] || ''}\t` +
-    `${spl[33] || ''}\t` + // Francesco
+    `${spl[33] || ''}\t` + // Riccardo
     `${spl[34] || ''}\t` +
+    `${spl[35] || ''}\t` + // Francesco
+    `${spl[36] || ''}\t` +
     `${row.dispositions['user:michiharu.hyogo77@gmail.com']?.disposition || ''}\t` +
     `${row.dispositions['user:michiharu.hyogo77@gmail.com']?.comments || ''}\t`
   );

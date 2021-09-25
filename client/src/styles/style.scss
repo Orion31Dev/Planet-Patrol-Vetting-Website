@@ -304,6 +304,14 @@ a {
           color: black;
           font-weight: $font-light;
         }
+      } 
+      
+      .paper {
+        background-color: color.adjust($accent-light-blue, $alpha: -0.25);
+        * {
+          color: black;
+          font-weight: $font-light;
+        }
       }
     }
 

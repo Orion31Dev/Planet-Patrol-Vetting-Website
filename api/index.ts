@@ -214,7 +214,7 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
         return;
       }
 
-      dispositionsRealName.push({ disposition: tic.dispositions[key].disposition, comments: tic.dispositions[key].comments, name: name });
+      dispositionsRealName.push({ disposition: tic.dispositions[key].disposition, comments: tic.dispositions[key].comments, name: name, _id: key });
     });
 
     tic.dispositions = dispositionsRealName;
