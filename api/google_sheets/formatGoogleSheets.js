@@ -15,6 +15,18 @@ let str = `1003831	https://exofop.ipac.caltech.edu/tess/target.php?id=1003831	8	
 
 let ids = {};
 
+let ticList = [];
+async function getTicList() {
+  let pList = await db.partitionedList('tic');
+  ticList = pList.rows;
+
+  while (ticList.length < pList.total_rows) {
+    pList = await db.partitionedList('tic', { startkey: `${ticList[ticList.length - 1].id}\0` });
+    ticList = ticList.concat(pList.rows);
+  }
+}
+
+
 function format(line) {
   let spl = line.split('\t');
   let dispositions = {};
@@ -151,11 +163,15 @@ async function processLineByLine() {
     }
 
     let fmt = format(line);
-
+    
     if (ids[fmt._id]) {
       fmt._id += `(${ids[fmt._id]++})`;
     } else {
       ids[fmt._id] = 2;
+    }
+    
+    if (ticList.some(t => t.id === fmt._id)) {
+      continue;
     }
 
     console.log('Inserting ' + fmt._id);
@@ -171,4 +187,4 @@ async function processLineByLine() {
   }
 }
 
-processLineByLine();
+getTicList().then(processLineByLine);

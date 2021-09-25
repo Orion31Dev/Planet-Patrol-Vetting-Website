@@ -27,7 +27,7 @@ async function getTicList() {
 }
 
 async function exportTsv() {
-  let fileName = path.join(__dirname, `/${formatDate(new Date())}mixed.tsv`);
+  let fileName = path.join(__dirname, `/${formatDate(new Date())}merged.tsv`);
 
   fs.appendFile(
     fileName,
@@ -66,6 +66,9 @@ async function exportTsv() {
   }
 
   console.log('Exported ' + fileName);
+
+  fs.writeFileSync(path.join(__dirname, '/allTics.json'), JSON.stringify(ticList));
+
   return fileName;
 }
 
