@@ -156,9 +156,8 @@ function generateDispositions(dispositions: Disposition[]) {
 
   let key = 0;
   return dispositions.map((d) => {
-    console.log(d);
     return (
-      <tr key={key++} className={(d._id === 'user:group' ? 'group' : '') + (d.name === 'user:paper' ? 'paper' : '')}>
+      <tr key={key++} className={(d._id === 'user:group' ? 'group' : '') + (d._id === 'user:paper' ? 'paper' : '')}>
         <td>{d.name}</td>
         <td>{d.disposition}</td>
         <td>{d.comments}</td>
