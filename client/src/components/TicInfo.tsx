@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import PDF from './PDF';
 
 export type TicData = {
   exofopLink: string;
@@ -24,11 +23,15 @@ export type Disposition = {
 };
 
 function TicInfo(props: { id: any; data: TicData }) {
-  let [pdfs, setPDFs]: [any[], Function] = useState([]);
-  let [showPDFs, setShowPDFs] = useState(false);
+  let [files, setFiles]: [any[], Function] = useState([]);
+  let [filesWaiting, setFilesWaiting] = useState(true);
+  let [showFiles, setShowFiles] = useState(true);
 
   useEffect(() => {
-    getPDFs(props.id, setPDFs);
+    getFiles(props.id, (data: any) => {
+      setFiles(data);
+      setFilesWaiting(false);
+    });
   }, [props.id]);
 
   let nullText = <span className="null">null</span>;
@@ -39,7 +42,9 @@ function TicInfo(props: { id: any; data: TicData }) {
         TIC <div className="id">{props.id}</div>
       </div>
       <div className="exofop">
-        <a target="_blank" rel="noreferrer" href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>[Exofop Link]</a>
+        <a target="_blank" rel="noreferrer" href={'https://exofop.ipac.caltech.edu/tess/target.php?id=' + props.id}>
+          [Exofop Link]
+        </a>
       </div>
       <div className="stats">
         <div className="stat">
@@ -102,9 +107,10 @@ function TicInfo(props: { id: any; data: TicData }) {
           <div className="num">{props.data.deltaTmag?.toFixed(2) || nullText}</div>
         </div>
       </div>
-      <div className="pdfs">
+      {filesWaiting ? <div className="files-waiting">Searching for Files...</div> :
+      (<div className="files">
         <div className="title">
-          PDFs <span onClick={() => setShowPDFs(!showPDFs)}>[{showPDFs ? 'Collapse' : 'Expand'}]</span>
+          Files <span onClick={() => setShowFiles(!showFiles)}>[{showFiles ? 'Collapse' : 'Expand'}]</span>
         </div>
         <table>
           <tbody>
@@ -112,10 +118,10 @@ function TicInfo(props: { id: any; data: TicData }) {
               <th>Name</th>
               <th>Links</th>
             </tr>
-            {showPDFs && generatePDFs(pdfs)}
+            {showFiles && generateFileRows(files)}
           </tbody>
         </table>
-      </div>
+      </div>)}
       <div className="dispositions">
         <div className="title">Disposition Table</div>
         <table>
@@ -125,7 +131,7 @@ function TicInfo(props: { id: any; data: TicData }) {
               <th>Disposition</th>
               <th>Comments</th>
             </tr>
-            {generateDispositions(props.data.dispositions)}
+            {generateDispositionRows(props.data.dispositions)}
           </tbody>
         </table>
       </div>
@@ -133,11 +139,11 @@ function TicInfo(props: { id: any; data: TicData }) {
   );
 }
 
-function generatePDFs(pdfs: any[]) {
-  if (!pdfs.length) return [];
+function generateFileRows(files: any[]) {
+  if (!files.length) return [];
 
   let key = 0;
-  return pdfs.map((p) => {
+  return files.map((p) => {
     return (
       <tr key={key++}>
         <td>{p.name}</td>
@@ -151,7 +157,7 @@ function generatePDFs(pdfs: any[]) {
   });
 }
 
-function generateDispositions(dispositions: Disposition[]) {
+function generateDispositionRows(dispositions: Disposition[]) {
   if (!dispositions) return [];
 
   let key = 0;
@@ -166,9 +172,9 @@ function generateDispositions(dispositions: Disposition[]) {
   });
 }
 
-function getPDFs(ticId: any, callback: Function) {
+function getFiles(ticId: any, callback: Function) {
   ticId = ticId.replace(/\(([^)]+)\)/gm, ''); // Remove "(2)" etc from multiplanetary systems
-  fetch('/api/pdfs/' + ticId, {
+  fetch('/api/files/' + ticId, {
     method: 'GET',
   })
     .then((res) => res.json())

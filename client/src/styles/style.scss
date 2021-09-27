@@ -282,7 +282,7 @@ a {
     }
 
     .dispositions,
-    .pdfs {
+    .files {
       margin-top: 4vmin;
 
       .title {
@@ -315,12 +315,34 @@ a {
       }
     }
 
-    .pdfs {
+    .files-waiting {
+      text-align: center;
+      margin-top: 3vmin;
+      background: $accent-dark-blue;
+
+      animation: files-waiting-color 1.5s infinite alternate ease-in-out;
+      border-radius: 1vmin;
+
+      font-size: .8em;
+
+      padding: 1vmin;
+    }
+
+    @keyframes files-waiting-color {
+      0% {
+        background: mix($accent-dark-blue, $bkg-color, 85%);
+      }
+      100% {
+        background: mix($accent-dark-blue, $bkg-color, 40%);
+      }
+    }
+
+    .files {
       .title {
         @include mini-title;
       }
 
-      .pdf {
+      .file {
         border: none;
         text-align: center;
         position: relative;

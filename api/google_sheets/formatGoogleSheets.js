@@ -6,6 +6,8 @@ require('dotenv').config();
 const fs = require('fs');
 const readline = require('readline');
 
+const gs = require('./googleSheets');
+
 // Cloudant instance creation (lowercase c for instance)
 const Cloudant = require('@cloudant/cloudant');
 const cloudant = new Cloudant({ url: process.env.CLOUDANT_URL, plugins: { iamauth: { iamApiKey: process.env.CLOUDANT_API_KEY } } });
@@ -24,6 +26,8 @@ async function getTicList() {
     pList = await db.partitionedList('tic', { startkey: `${ticList[ticList.length - 1].id}\0` });
     ticList = ticList.concat(pList.rows);
   }
+
+  console.log("Fetched TICs");
 }
 
 
@@ -187,4 +191,4 @@ async function processLineByLine() {
   }
 }
 
-getTicList().then(processLineByLine);
+getTicList().then(() => gs.initAuth().then(() => gs.downloadSpreadsheet().then(processLineByLine)));

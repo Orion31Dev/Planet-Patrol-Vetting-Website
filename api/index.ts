@@ -9,7 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-// Google Drive Libraries for PDFs
+// Google Drive Libraries for Tic Files
 const { google } = require('googleapis');
 
 const scopes = ['https://www.googleapis.com/auth/drive'];
@@ -71,7 +71,7 @@ app.use(async (req: any, _res: any, next: Function) => {
 // Get user data
 app.post('/api/auth/google', async (req: any, res: any) => {
   const { token } = req.body;
-  
+
   if (!token) {
     res.status(400).send('No token provided.');
     return;
@@ -214,7 +214,12 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
         return;
       }
 
-      dispositionsRealName.push({ disposition: tic.dispositions[key].disposition, comments: tic.dispositions[key].comments, name: name, _id: key });
+      dispositionsRealName.push({
+        disposition: tic.dispositions[key].disposition,
+        comments: tic.dispositions[key].comments,
+        name: name,
+        _id: key,
+      });
     });
 
     tic.dispositions = dispositionsRealName;
@@ -227,13 +232,8 @@ app.get('/api/tic/:ticId', async (req: any, res: any) => {
   }
 });
 
-app.get('/api/pdfs/:ticId', async (req: any, res: any) => {
-  let files: any[] = [];
-
-  files.push(...((await getPDFsFromFolder(req.params.ticId, '1raRVDT9TuLj-Lv34VOBUOdFGUh-hsh7s')) as []));
-  files.push(...((await getPDFsFromFolder(req.params.ticId, '1A6NKNFKZcx_i7WHdBsFDj_io3x70GMxi')) as []));
-  files.push(...((await getPDFsFromFolder(req.params.ticId, '1oYtjXgzhplUzUZ7zO0yF5QM-3V6kQsUi')) as []));
-  files.push(...((await getPDFsFromFolder(req.params.ticId, '1_zsiNEZyiIeq4_vBpdbhtVhEJdfXxZTp')) as []));
+app.get('/api/files/:ticId', async (req: any, res: any) => {
+  const files = await getTicFiles(req.params.ticId);
 
   if (files.length) {
     res.json(files);
@@ -244,18 +244,72 @@ app.get('/api/pdfs/:ticId', async (req: any, res: any) => {
   }
 });
 
-function getPDFsFromFolder(ticId: string, folderId: string) {
+async function getTicFiles(ticId: string) {
+  let files = [] as any[];
+  for await (let folder of folderList) {
+    let newFiles = await getTicFilesFromFolder(ticId, folder.id);
+    if (newFiles) files = files.concat(newFiles);
+  }
+
+  return files;
+}
+
+function getTicFilesFromFolder(ticId: string, folderId: string) {
   return new Promise((resolve, reject) => {
     drive.files.list(
       {
-        q: `name contains '${ticId}' and '${folderId}' in parents and mimeType = 'application/pdf'`,
-        pageSize: 10,
-        fields: 'nextPageToken, files(id, webContentLink, name)',
+        q: `'${folderId}' in parents and name contains '${ticId}' and mimeType != 'application/vnd.google-apps.folder'`,
+        pageSize: 1000,
+        fields: 'nextPageToken, files(id, webContentLink, name, mimeType)',
       },
-      (err: any, driveRes: any) => {
-        if (err) reject(console.error('The API returned an error: ' + err));
+      async (err: any, driveRes: any) => {
+        if (err) reject(console.error(err));
 
-        resolve(driveRes.data.files);
+        let files = driveRes.data.files;
+
+        if (driveRes.data.nextPageToken) {
+          files = files.concat(await getTicFilesFromFolder(ticId, folderId));
+        }
+
+        resolve(files);
+      }
+    );
+  });
+}
+
+let folderList: any[] = [];
+async function recursiveGetSubfolders(folderId: string, pageToken?: string) {
+  return new Promise((resolve, reject) => {
+    let folderIds: any[] = [];
+
+    drive.files.list(
+      {
+        q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder'`,
+        pageSize: 1000,
+        fields: 'nextPageToken, files(id, webContentLink, name, mimeType)',
+        pageToken: pageToken,
+      },
+      async (err: any, driveRes: any) => {
+        if (err) {
+          console.error('The API returned an error: ' + err);
+          reject(err);
+        }
+
+        if (driveRes.data.nextPageToken) {
+          folderIds = folderIds.concat(await recursiveGetSubfolders(folderId, driveRes.data.nextPageToken));
+        }
+
+        for await (const file of driveRes.data.files) {
+          // Skip TIC-specific folders
+          /*if (file.name.match(/^\d+$/)) {
+            continue;
+          }*/
+
+          folderIds = folderIds.concat(await recursiveGetSubfolders(file.id));
+        }
+
+        folderIds = folderIds.concat(driveRes.data.files);
+        resolve(folderIds);
       }
     );
   });
@@ -291,6 +345,15 @@ async function getTicList() {
   console.log('Successfully fetched ticList.');
   return ticList;
 }
+
+
+async function updateFolderList() {
+  folderList = await recursiveGetSubfolders('1Z74BU-ijJy710QA3M9YwE_l1cE_dpSHA') as [];
+  console.log("Got folder list");
+};
+
+updateFolderList();
+setInterval(updateFolderList, 60 * 60 * 1000 /* 60 minutes */);
 
 let ticList: any[] = [];
 getTicList();
