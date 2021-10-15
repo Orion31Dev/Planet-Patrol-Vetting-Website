@@ -106,7 +106,7 @@ app.post('/api/auth/google', async (req: any, res: any) => {
 
 // Logout
 app.delete('/api/auth/logout', async (req: any, res: any) => {
-  await req.session.destroy(); // Destroy saved userId
+  req.session = null; // Destroy saved userId
 
   res.status(200);
   res.json({
