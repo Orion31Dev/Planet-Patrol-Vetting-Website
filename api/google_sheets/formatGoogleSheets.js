@@ -1,6 +1,8 @@
 // TIC ID,ExoFOP-TESS,Sectors,Epoch,Period,Duration,Depth,Depth,Rtranister,Rstar,Tmag,Delta Tmag,Group Disposition,Reason for Group Disposition,Group Comments,Disposition (VK),Comments (VK),Disposition (LC),Comments (LC),Disposition (HDL),Comments (HDL),Disposition (MZDF),Comments (MZDF),Disposition (Julien),Comments (Julien),Disposition (JY),Comments (JY),Disposition (AF),Comments (AF),Disposition(MAC),Comments(MAC),Disposition(RI),Comments(RI),Disposition(FG),Comments(FG),Disposition(MH),Comments(MH)
 // 0            1        2      3     4       5       6     7      8         9    10      11            12                     13                    14             15              16             17              18             19               20                21              22               23                    24                25             26              27             28               29             30             31            32             33            34           35               36
 
+// This script will upload newest data from the Google Sheet into the website.
+
 require('dotenv').config();
 
 const fs = require('fs');
@@ -12,8 +14,6 @@ const gs = require('./googleSheets');
 const Cloudant = require('@cloudant/cloudant');
 const cloudant = new Cloudant({ url: process.env.CLOUDANT_URL, plugins: { iamauth: { iamApiKey: process.env.CLOUDANT_API_KEY } } });
 const db = cloudant.use('planet-patrol-db');
-
-let str = `1003831	https://exofop.ipac.caltech.edu/tess/target.php?id=1003831	8	2458518.203	1.651142	0.76	3007	0.30	0.49	0.98	10.6701	6.30				PC	pVshape			CP (exofop)	SPC, our pdf graph looks off in the scale	CP	TOI-564 b			PC										CP	TOI-564 b `;
 
 let ids = {};
 
@@ -27,9 +27,8 @@ async function getTicList() {
     ticList = ticList.concat(pList.rows);
   }
 
-  console.log("Fetched TICs");
+  console.log('Fetched TICs');
 }
-
 
 function format(line) {
   let spl = line.split('\t');
@@ -42,13 +41,12 @@ function format(line) {
     };
   }
 
- if (spl[14]) {
+  if (spl[14]) {
     dispositions['user:group'] = {
       disposition: spl[14],
       comments: spl[15] || '',
     };
   }
-
 
   // Website
   if (spl[17]) {
@@ -72,7 +70,6 @@ function format(line) {
       comments: spl[22] || '',
     };
   }
-
 
   // Website
   if (spl[23]) {
@@ -167,14 +164,14 @@ async function processLineByLine() {
     }
 
     let fmt = format(line);
-    
+
     if (ids[fmt._id]) {
       fmt._id += `(${ids[fmt._id]++})`;
     } else {
       ids[fmt._id] = 2;
     }
-    
-    if (ticList.some(t => t.id === fmt._id)) {
+
+    if (ticList.some((t) => t.id === fmt._id)) {
       continue;
     }
 
@@ -187,8 +184,8 @@ async function processLineByLine() {
     }
 
     // Sleep
-    // await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 80));
   }
 }
 
-getTicList().then(() => gs.initAuth().then(() => gs.downloadSpreadsheet().then(processLineByLine)));
+getTicList().then(() => gs.initAuth().then(processLineByLine));

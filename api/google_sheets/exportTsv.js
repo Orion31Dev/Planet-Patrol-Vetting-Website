@@ -1,3 +1,5 @@
+// This script will merge website data with newest spreadsheet data and create a .tsv file
+
 require('dotenv').config();
 
 const fs = require('fs');
@@ -61,7 +63,7 @@ async function exportTsv() {
         if (err) throw err;
       });
     } else {
-      console.log(`Matches in ticList w/ id=${id}: ${filterArr.length}`);
+      console.log(`Matches in ticList w/ id="${id}": ${filterArr.length}. Skipping...`);
     }
   }
 

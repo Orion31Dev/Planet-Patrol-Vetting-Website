@@ -82,7 +82,10 @@ function downloadSpreadsheet() {
     const link = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?exportFormat=tsv&amp;gid=78752082`;
     // delete the file if it exists
     if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+      resolve();
+      console.log("table.tsv already exists.");
+      return;
+      // fs.unlinkSync(filePath);
     }
 
     const file = fs.createWriteStream(filePath);

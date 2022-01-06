@@ -3,17 +3,15 @@ import Header from '../components/Header';
 import Search from '../components/Search';
 import Table from '../components/Table';
 
-function Home() {
-  let [searchVal, setSearchVal] = useState('');
-
+export default function Paper() {
+  let [searchVal, setSearchVal] = useState("");
+  
   return (
-    <div className="home">
+    <div className="paper">
       <Header />
-      <div className="title">All Dispositions</div>
+      <div className="title">Published Dispositions</div>
       <Search inputUpdateCallback={setSearchVal} />
-      <Table query={searchVal} />
+      <Table query={searchVal} paperOnly />
     </div>
   );
 }
-
-export default Home;

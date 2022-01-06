@@ -5,6 +5,7 @@ import Home from './routes/Home';
 import Tic from './routes/Tic';
 import Profile from './routes/Profile';
 import Dictionary from './routes/Dictionary';
+import Paper from './routes/Paper';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/tic/:ticId" component={Tic} />
           <Route path="/profile" component={Profile} />
           <Route path="/dictionary" component={Dictionary} />
+          <Route path="/paper" component={Paper} />
           <Route path="/" component={Home} />
         </Switch>
       </Router>

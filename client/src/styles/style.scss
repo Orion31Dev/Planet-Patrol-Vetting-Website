@@ -646,3 +646,12 @@ table:not(.quick-fills) {
     font-size: 5em;
   }
 }
+
+.paper > .title, .home > .title {
+  font-weight: $font-title;
+  font-size: 3em;
+
+  text-align: center;
+
+  margin-top: .5em;
+}

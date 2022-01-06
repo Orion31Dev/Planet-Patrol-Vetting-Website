@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 enum SortDirection {
   ID,
   DISPS,
-  GROUP_DISP,
+  PERIOD,
+  RADIUS_PLANET,
+  RADIUS_STAR,
+  PAPER_DISP,
 }
 
-export default function Table(props: { query?: string }) {
+export default function Table(props: { query?: string; paperOnly?: boolean }) {
   let [tics, setTics] = useState([]);
   let [fail, setFail] = useState(false);
   let [sortDir, setSortDir] = useState(SortDirection.ID);
@@ -40,16 +43,43 @@ export default function Table(props: { query?: string }) {
             setSortDir(SortDirection.DISPS);
           }}
         >
-          # Dispositions
+          # Dispositions Dsc.
         </span>{' '}
         |{' '}
         <span
-          className={sortDir === SortDirection.GROUP_DISP ? 'selected' : ''}
+          className={sortDir === SortDirection.PERIOD ? 'selected' : ''}
           onClick={() => {
-            setSortDir(SortDirection.GROUP_DISP);
+            setSortDir(SortDirection.PERIOD);
           }}
         >
-          Group Disposition
+          Period
+        </span>{' '}
+        |{' '}
+        <span
+          className={sortDir === SortDirection.RADIUS_PLANET ? 'selected' : ''}
+          onClick={() => {
+            setSortDir(SortDirection.RADIUS_PLANET);
+          }}
+        >
+          Rtranister
+        </span>{' '}
+        |{' '}
+        <span
+          className={sortDir === SortDirection.RADIUS_STAR ? 'selected' : ''}
+          onClick={() => {
+            setSortDir(SortDirection.RADIUS_STAR);
+          }}
+        >
+          Rstar
+        </span>{' '}
+        |{' '}
+        <span
+          className={sortDir === SortDirection.PAPER_DISP ? 'selected' : ''}
+          onClick={() => {
+            setSortDir(SortDirection.PAPER_DISP);
+          }}
+        >
+          Paper Disposition
         </span>
       </div>
       <table>
@@ -67,12 +97,17 @@ export default function Table(props: { query?: string }) {
             <th>RStar</th>
             <th>Tmag</th>
             <th>Δ Tmag</th>
-            <th>Group Disposition</th>
-            <th>Group Comments</th>
+            <th>Paper Disposition</th>
+            <th>Paper Comments</th>
             <th># Disps</th>
           </tr>
           {sort(tics, sortDir)
             .filter((t: any) => {
+              if (props.paperOnly && !t.doc.dispositions['user:paper']) {
+                console.log(t);
+                return false;
+              }
+
               if (props.query) {
                 if (
                   props.query.split(', ').every((d) => {
@@ -114,10 +149,31 @@ function sort(arr: any[], sort: SortDirection) {
 
         return ad > bd ? 1 : -1;
       });
-    case SortDirection.GROUP_DISP:
+    case SortDirection.PERIOD:
       return arr.sort((a: any, b: any) => {
-        let ag = a.doc.dispositions['user:group']?.disposition || '';
-        let bg = b.doc.dispositions['user:group']?.disposition || '';
+        let ap = a.doc.period;
+        let bp = b.doc.period;
+
+        return ap > bp ? 1 : -1;
+      });
+    case SortDirection.RADIUS_PLANET:
+      return arr.sort((a: any, b: any) => {
+        let ap = a.doc.rtranister;
+        let bp = b.doc.rtranister;
+
+        return ap > bp ? 1 : -1;
+      });
+    case SortDirection.RADIUS_STAR:
+      return arr.sort((a: any, b: any) => {
+        let ap = a.doc.rStar;
+        let bp = b.doc.rStar;
+
+        return ap > bp ? 1 : -1;
+      });
+    case SortDirection.PAPER_DISP:
+      return arr.sort((a: any, b: any) => {
+        let ag = a.doc.dispositions['user:paper']?.disposition || '';
+        let bg = b.doc.dispositions['user:paper']?.disposition || '';
 
         if (ag === bg) {
           let ia = parseInt(a.id.replace('tic:', ''));
@@ -155,12 +211,12 @@ let index = 0;
 function createTableRow(tic: any) {
   let ticId = tic._id.split(':')[1];
 
-  let gd = '';
-  let gc = '';
+  let pd = '';
+  let pc = '';
 
-  if (tic.dispositions['user:group']) {
-    gd = tic.dispositions['user:group'].disposition;
-    gc = tic.dispositions['user:group'].comments;
+  if (tic.dispositions['user:paper']) {
+    pd = tic.dispositions['user:paper'].disposition;
+    pc = tic.dispositions['user:paper'].comments;
   }
 
   return (
@@ -183,8 +239,8 @@ function createTableRow(tic: any) {
       <td>{tic.rStar?.toFixed(2) || ''}</td>
       <td>{tic.tmag}</td>
       <td>{tic.deltaTmag}</td>
-      <td>{gd}</td>
-      <td>{gc}</td>
+      <td>{pd}</td>
+      <td>{pc}</td>
       <td>{Object.keys(tic.dispositions).length}</td>
     </tr>
   );
