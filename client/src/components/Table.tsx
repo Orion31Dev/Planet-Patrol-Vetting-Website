@@ -61,7 +61,7 @@ export default function Table(props: { query?: string; paperOnly?: boolean }) {
             setSortDir(SortDirection.RADIUS_PLANET);
           }}
         >
-          Rtranister
+          Rtransiter
         </span>{' '}
         |{' '}
         <span
@@ -93,7 +93,7 @@ export default function Table(props: { query?: string; paperOnly?: boolean }) {
             <th>Duration [Hrs]</th>
             <th>Depth [ppm]</th>
             <th>Depth [%]</th>
-            <th>Rtranister</th>
+            <th>Rtransiter</th>
             <th>RStar</th>
             <th>Tmag</th>
             <th>Δ Tmag</th>
@@ -158,8 +158,8 @@ function sort(arr: any[], sort: SortDirection) {
       });
     case SortDirection.RADIUS_PLANET:
       return arr.sort((a: any, b: any) => {
-        let ap = a.doc.rtranister;
-        let bp = b.doc.rtranister;
+        let ap = a.doc.rTranister;
+        let bp = b.doc.rTranister;
 
         return ap > bp ? 1 : -1;
       });
