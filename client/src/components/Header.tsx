@@ -22,7 +22,7 @@ function Header(props: { loggedInCallback?: Function }) {
       <div className="links">
         <a href="/">Home</a>
         <div className="sep">|</div>
-        <a href="/paper">Published</a>
+        <a href="/unpublished">Unpublished</a>
         <div className="sep">|</div>
         <a href="/dictionary">Dictionary</a>
         <div className="sep">|</div>

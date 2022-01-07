@@ -1,11 +1,11 @@
 import React from 'react';
 import './styles/style.scss';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './routes/Home';
+import Unpublished from './routes/Unpublished';
 import Tic from './routes/Tic';
 import Profile from './routes/Profile';
 import Dictionary from './routes/Dictionary';
-import Paper from './routes/Paper';
+import Published from './routes/Published';
 
 function App() {
   return (
@@ -18,8 +18,8 @@ function App() {
           </Route>
           <Route path="/profile" component={Profile} />
           <Route path="/dictionary" component={Dictionary} />
-          <Route path="/paper" component={Paper} />
-          <Route path="/" component={Home} />
+          <Route path="/unpublished" component={Unpublished} />
+          <Route path="/" component={Published} />
         </Switch>
       </Router>
     </div>

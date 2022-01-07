@@ -39,6 +39,7 @@ function TicInfo(props: { id: any; data: TicData; paper?: boolean }) {
   return (
     <div className="tic-info section">
       <div className="title">
+        {props.paper && <div className="published">PUBLISHED</div>}
         TIC <div className="id">{props.id}</div>
       </div>
       <div className="exofop">

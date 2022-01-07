@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Search from '../components/Search';
 import Table from '../components/Table';
 
-function Home() {
+function Unpublished() {
   let [searchVal, setSearchVal] = useState('');
 
   return (
@@ -16,4 +16,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Unpublished;

@@ -217,6 +217,15 @@ a {
   .tic-info {
     display: block;
 
+    .published {
+      text-align: center;
+      font-size: 0.5em;
+
+      font-weight: $font-thin;
+
+      margin-bottom: -.3em;
+    }
+
     > .title {
       font-weight: $font-thin;
       font-size: 1.5em;
@@ -304,8 +313,8 @@ a {
           color: black;
           font-weight: $font-light;
         }
-      } 
-      
+      }
+
       .paper {
         background-color: color.adjust($accent-light-blue, $alpha: -0.25);
         * {
@@ -323,7 +332,7 @@ a {
       animation: files-waiting-color 1.5s infinite alternate ease-in-out;
       border-radius: 1vmin;
 
-      font-size: .8em;
+      font-size: 0.8em;
 
       padding: 1vmin;
     }
@@ -647,11 +656,12 @@ table:not(.quick-fills) {
   }
 }
 
-.paper > .title, .home > .title {
+.paper > .title,
+.home > .title {
   font-weight: $font-title;
   font-size: 3em;
 
   text-align: center;
 
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
