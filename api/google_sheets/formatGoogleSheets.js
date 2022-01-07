@@ -138,7 +138,7 @@ function format(line) {
     duration: parseFloat(spl[5]),
     depth: parseFloat(spl[6]),
     depthPercent: parseFloat(spl[7]),
-    rTranister: parseFloat(spl[8]),
+    rTranister: parseFloat(spl[8]), // Supposed to be rTransiter, but it's always been misspelt
     rStar: parseFloat(spl[9]),
     tmag: parseFloat(spl[10]),
     deltaTmag: parseFloat(spl[11]),

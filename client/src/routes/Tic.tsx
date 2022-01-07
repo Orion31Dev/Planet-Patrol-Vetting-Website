@@ -8,7 +8,7 @@ import TicInput from '../components/TicInput';
 
 const emptyTICData = {} as TicData;
 
-function Tic() {
+function Tic(props: { paper?: boolean }) {
   let { ticId }: any = useParams();
   let [is404, setIs404] = useState(false);
   let [user, setUser]: [any, Function] = useState(null);
@@ -17,7 +17,7 @@ function Tic() {
   useEffect(() => {
     getTicData(ticId, setIs404, setTicData);
   }, [ticId]);
-  
+
   if (is404)
     return (
       <div>
@@ -29,7 +29,7 @@ function Tic() {
   return (
     <div className="tic">
       <Header loggedInCallback={setUser} />
-      <TicInfo id={ticId} data={ticData} />
+      <TicInfo id={ticId} data={ticData} paper={props.paper} />
       {user && <TicInput id={ticId} user={user} updateFunction={() => getTicData(ticId, setIs404, setTicData)} />}
     </div>
   );

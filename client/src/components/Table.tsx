@@ -9,7 +9,7 @@ enum SortDirection {
   PAPER_DISP,
 }
 
-export default function Table(props: { query?: string; paperOnly?: boolean }) {
+export default function Table(props: { query?: string; paper?: boolean }) {
   let [tics, setTics] = useState([]);
   let [fail, setFail] = useState(false);
   let [sortDir, setSortDir] = useState(SortDirection.ID);
@@ -103,8 +103,7 @@ export default function Table(props: { query?: string; paperOnly?: boolean }) {
           </tr>
           {sort(tics, sortDir)
             .filter((t: any) => {
-              if (props.paperOnly && !t.doc.dispositions['user:paper']) {
-                console.log(t);
+              if (props.paper && !t.doc.dispositions['user:paper']) {
                 return false;
               }
 
@@ -126,7 +125,7 @@ export default function Table(props: { query?: string; paperOnly?: boolean }) {
                 return false;
               } else return true;
             })
-            .map((t: any) => createTableRow(t.doc))}
+            .map((t: any) => createTableRow(t.doc, props.paper))}
         </tbody>
       </table>
     </div>
@@ -208,7 +207,7 @@ function getTics(callback: Function) {
 }
 
 let index = 0;
-function createTableRow(tic: any) {
+function createTableRow(tic: any, paper?: boolean) {
   let ticId = tic._id.split(':')[1];
 
   let pd = '';
@@ -219,10 +218,13 @@ function createTableRow(tic: any) {
     pc = tic.dispositions['user:paper'].comments;
   }
 
+  console.log(paper)
+  let link = paper ? `/ptic/${ticId}` : `/tic/${ticId}`;
+
   return (
     <tr key={index++}>
       <td className="id">
-        <a href={'/tic/' + ticId}>{ticId}</a>
+        <a href={link}>{ticId}</a>
       </td>
       <td>
         <a className="gray" target="_blank" rel="noreferrer" href={`https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId}`}>

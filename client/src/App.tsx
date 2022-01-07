@@ -13,6 +13,9 @@ function App() {
       <Router>
         <Switch>
           <Route path="/tic/:ticId" component={Tic} />
+          <Route path="/ptic/:ticId">
+            <Tic paper />
+          </Route>
           <Route path="/profile" component={Profile} />
           <Route path="/dictionary" component={Dictionary} />
           <Route path="/paper" component={Paper} />

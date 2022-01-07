@@ -11,7 +11,7 @@ export default function Paper() {
       <Header />
       <div className="title">Published Dispositions</div>
       <Search inputUpdateCallback={setSearchVal} />
-      <Table query={searchVal} paperOnly />
+      <Table query={searchVal} paper />
     </div>
   );
 }

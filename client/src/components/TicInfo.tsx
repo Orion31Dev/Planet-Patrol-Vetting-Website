@@ -22,7 +22,7 @@ export type Disposition = {
   comments: string;
 };
 
-function TicInfo(props: { id: any; data: TicData }) {
+function TicInfo(props: { id: any; data: TicData; paper?: boolean }) {
   let [files, setFiles]: [any[], Function] = useState([]);
   let [filesWaiting, setFilesWaiting] = useState(true);
   let [showFiles, setShowFiles] = useState(true);
@@ -107,21 +107,24 @@ function TicInfo(props: { id: any; data: TicData }) {
           <div className="num">{props.data.deltaTmag?.toFixed(2) || nullText}</div>
         </div>
       </div>
-      {filesWaiting ? <div className="files-waiting">Searching for Files...</div> :
-      (<div className="files">
-        <div className="title">
-          Files <span onClick={() => setShowFiles(!showFiles)}>[{showFiles ? 'Collapse' : 'Expand'}]</span>
+      {filesWaiting ? (
+        <div className="files-waiting">Searching for Files...</div>
+      ) : (
+        <div className="files">
+          <div className="title">
+            Files <span onClick={() => setShowFiles(!showFiles)}>[{showFiles ? 'Collapse' : 'Expand'}]</span>
+          </div>
+          <table>
+            <tbody>
+              <tr className="headers">
+                <th>Name</th>
+                <th>Links</th>
+              </tr>
+              {showFiles && generateFileRows(files)}
+            </tbody>
+          </table>
         </div>
-        <table>
-          <tbody>
-            <tr className="headers">
-              <th>Name</th>
-              <th>Links</th>
-            </tr>
-            {showFiles && generateFileRows(files)}
-          </tbody>
-        </table>
-      </div>)}
+      )}
       <div className="dispositions">
         <div className="title">Disposition Table</div>
         <table>
@@ -131,7 +134,7 @@ function TicInfo(props: { id: any; data: TicData }) {
               <th>Disposition</th>
               <th>Comments</th>
             </tr>
-            {generateDispositionRows(props.data.dispositions)}
+            {generateDispositionRows(props.data.dispositions, props.paper)}
           </tbody>
         </table>
       </div>
@@ -157,15 +160,20 @@ function generateFileRows(files: any[]) {
   });
 }
 
-function generateDispositionRows(dispositions: Disposition[]) {
+function generateDispositionRows(dispositions: Disposition[], paper?: boolean) {
   if (!dispositions) return [];
 
   let key = 0;
   return dispositions.map((d) => {
+    // Public Dispositions should say PC instead of CP.
+    if (d._id === 'user:group' && paper) return <React.Fragment></React.Fragment>;
+
+    let disposition = paper ? d.disposition.replace('CP', 'PC') : d.disposition;
+
     return (
       <tr key={key++} className={(d._id === 'user:group' ? 'group' : '') + (d._id === 'user:paper' ? 'paper' : '')}>
         <td>{d.name}</td>
-        <td>{d.disposition}</td>
+        <td>{disposition}</td>
         <td>{d.comments}</td>
       </tr>
     );
