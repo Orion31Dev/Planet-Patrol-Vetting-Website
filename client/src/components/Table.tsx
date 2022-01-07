@@ -101,7 +101,7 @@ export default function Table(props: { query?: string; paper?: boolean }) {
             <th>Paper Comments</th>
             <th># Disps</th>
           </tr>
-          {sort(tics, sortDir)
+          {sort(tics, sortDir, props.paper)
             .filter((t: any) => {
               if (props.paper && !t.doc.dispositions['user:paper']) {
                 return false;
@@ -132,7 +132,7 @@ export default function Table(props: { query?: string; paper?: boolean }) {
   );
 }
 
-function sort(arr: any[], sort: SortDirection) {
+function sort(arr: any[], sort: SortDirection, paper?: boolean) {
   switch (sort) {
     case SortDirection.ID:
       return arr.sort((a: any, b: any) => {
@@ -173,6 +173,12 @@ function sort(arr: any[], sort: SortDirection) {
       return arr.sort((a: any, b: any) => {
         let ag = a.doc.dispositions['user:paper']?.disposition || '';
         let bg = b.doc.dispositions['user:paper']?.disposition || '';
+
+        // For published dispositions, CP Paper dispositions should be replaced by PC.
+        if (paper) {
+          if (ag === 'CP') ag = 'PC';
+          if (bg === 'CP') bg = 'PC';
+        }
 
         if (ag === bg) {
           let ia = parseInt(a.id.replace('tic:', ''));
@@ -216,9 +222,11 @@ function createTableRow(tic: any, paper?: boolean) {
   if (tic.dispositions['user:paper']) {
     pd = tic.dispositions['user:paper'].disposition;
     pc = tic.dispositions['user:paper'].comments;
+
+    // For published dispositions, CP Paper dispositions should be replaced by PC.
+    if (paper && pd === 'CP') pd = 'PC';
   }
 
-  console.log(paper)
   let link = paper ? `/ptic/${ticId}` : `/tic/${ticId}`;
 
   return (

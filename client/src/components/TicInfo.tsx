@@ -165,10 +165,13 @@ function generateDispositionRows(dispositions: Disposition[], paper?: boolean) {
 
   let key = 0;
   return dispositions.map((d) => {
-    // Public Dispositions should say PC instead of CP.
+    // Public Dispositions should hide the Group Disposition.
     if (d._id === 'user:group' && paper) return <React.Fragment></React.Fragment>;
 
-    let disposition = paper ? d.disposition.replace('CP', 'PC') : d.disposition;
+    // For published dispositions, CP Paper dispositions should be replaced by PC.
+    let disposition;
+    if (d._id === 'user:paper' && paper) disposition = d.disposition.replace('CP', 'PC');
+    else disposition = d.disposition;
 
     return (
       <tr key={key++} className={(d._id === 'user:group' ? 'group' : '') + (d._id === 'user:paper' ? 'paper' : '')}>
