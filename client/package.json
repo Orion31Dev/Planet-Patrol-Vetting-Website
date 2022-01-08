@@ -1,5 +1,5 @@
 {
-  "name": "@planet-patrol-website/client",
+  "name": "planet-patrol-web-client",
   "version": "1.0.0",
   "main": "./src/index.tsx",
   "repository": "https://github.com/Orion31Dev/Planet-Patrol-Vetting-Website",

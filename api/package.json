@@ -1,5 +1,5 @@
 {
-  "name": "@planet-patrol-website/api",
+  "name": "planet-patrol-web-api",
   "version": "1.0.0",
   "main": "./index.ts",
   "repository": "https://github.com/Orion31Dev/Planet-Patrol-Vetting-Website",

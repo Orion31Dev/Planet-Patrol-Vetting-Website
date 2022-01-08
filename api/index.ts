@@ -319,8 +319,6 @@ app.get('/*', (_req: any, res: any) => {
   res.sendFile(INDEX_FILE, { DIST_DIR });
 });
 
-app.listen(port);
-
 async function getTicList() {
   let newTicList: any[] = [];
   let pList: any = {};
@@ -346,11 +344,10 @@ async function getTicList() {
   return ticList;
 }
 
-
 async function updateFolderList() {
-  folderList = await recursiveGetSubfolders('1Z74BU-ijJy710QA3M9YwE_l1cE_dpSHA') as [];
-  console.log("Got folder list");
-};
+  folderList = (await recursiveGetSubfolders('1Z74BU-ijJy710QA3M9YwE_l1cE_dpSHA')) as [];
+  console.log('Got folder list');
+}
 
 updateFolderList();
 setInterval(updateFolderList, 60 * 60 * 1000 /* 60 minutes */);
@@ -364,3 +361,7 @@ async function asyncForEach(array: any[], callback: Function) {
     await callback(array[index], index, array);
   }
 }
+
+module.exports = app;
+
+if (process.env.NODE_ENV !== 'production') app.listen(port || 3001);
