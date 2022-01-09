@@ -171,7 +171,7 @@ app.post('/api/submit/:ticId', async (req: any, res: any) => {
 
 app.get('/api/all-tics', async (req: any, res: any) => {
   try {
-    await getTicList();
+    if (ticList.length === 0) await getTicList();
     res.json(ticList);
     res.status(200);
   } catch {
@@ -185,7 +185,7 @@ app.get('/api/answered-tics', async (req: any, res: any) => {
     let unansweredTics = [];
     let answeredTics = [];
 
-    await getTicList();
+    if (ticList.length === 0) await getTicList();
 
     for (let tic of ticList) {
       let id = tic.id.split(':')[1];
