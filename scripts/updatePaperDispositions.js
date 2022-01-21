@@ -45,7 +45,7 @@ async function removeAllPaperDispsFromWebsite() {
 }
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('./api/google_sheets/newPaperDisps.tsv');
+  const fileStream = fs.createReadStream('./scripts/newPaperDisps.tsv');
 
   const rl = readline.createInterface({
     input: fileStream,
