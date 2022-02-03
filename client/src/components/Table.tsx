@@ -25,7 +25,11 @@ export default function Table(props: { query?: string; paper?: boolean }) {
 
   return (
     <div className="section table">
-      <div className="title">TIC Table</div>
+      <div className="title">
+        TIC Table
+        <div className="sep">|</div>
+        {!fail && <a className="csv" href={`/api/csv${props.paper ? '' : '/all'}`} target="_blank">Download as CSV</a>}
+      </div>
       <div className="sort-by">
         <div className="label">Sort By</div>:{' '}
         <span

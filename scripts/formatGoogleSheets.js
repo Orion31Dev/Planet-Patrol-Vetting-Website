@@ -149,7 +149,7 @@ function format(line) {
 //db.insert(format(str))
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('./api/google_sheets/table.tsv');
+  const fileStream = fs.createReadStream('./scripts/table.tsv');
 
   const rl = readline.createInterface({
     input: fileStream,

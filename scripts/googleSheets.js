@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'];
-const TOKEN_PATH = './api/google_sheets/token.json';
+const TOKEN_PATH = './scripts/token.json';
 
 const SPREADSHEET_ID = '1vI_ho-gpw4xq_VTRyTMB3DdNAytWdckrDANbJ1BEcMU';
 
@@ -16,7 +16,7 @@ client = null;
 // Load client secrets from a local file.
 function initAuth() {
   return new Promise((resolve, reject) => {
-    fs.readFile('./api/google_sheets/credentials.json', (err, content) => {
+    fs.readFile('./scripts/credentials.json', (err, content) => {
       if (err) reject(err);
       // Authorize a client with credentials, then call the Google Sheets API.
       authorize(JSON.parse(content), resolve);
@@ -78,7 +78,7 @@ function getNewToken(oAuth2Client, callback) {
 // download spreadsheet as tsv file
 function downloadSpreadsheet() {
   return new Promise((resolve, reject) => {
-    const filePath = './api/google_sheets/table.tsv';
+    const filePath = './scripts/table.tsv';
     const link = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?exportFormat=tsv&amp;gid=78752082`;
     // delete the file if it exists
     if (fs.existsSync(filePath)) {

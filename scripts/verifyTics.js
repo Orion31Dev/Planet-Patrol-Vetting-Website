@@ -24,7 +24,7 @@ async function getTicList() {
 let ids = {};
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('./api/google_sheets/table.tsv');
+  const fileStream = fs.createReadStream('./scripts/table.tsv');
 
   const rl = readline.createInterface({
     input: fileStream,

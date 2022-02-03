@@ -244,6 +244,43 @@ app.get('/api/files/:ticId', async (req: any, res: any) => {
   }
 });
 
+app.get(['/api/csv', '/api/csv/all'], async (req: any, res: any) => {
+  let tics = ticList;
+  let all = req.url.includes('all');
+
+  let csv =
+    'TIC ID,ExoFOP-TESS,Sectors,Epoch [BJD],Period [Days],Duration [Hours],Depth [ppm],Depth [%],Rtranister [RJup],Rstar [RSun],Tmag,Delta Tmag,Paper disp (LC),Paper comm\n';
+
+  tics.forEach((tic: any) => {
+    if (!all && !tic.doc.dispositions['user:paper']) return;
+
+    let ticId = tic.id.split(':')[1];
+
+    let newLine = [
+      ticId,
+      `https://exofop.ipac.caltech.edu/tess/target.php?id=${ticId.replace(/\([\s\S]*?\)/g, '')}`,
+      `"${tic.doc.sectors}"`,
+      `"${tic.doc.epoch}"`,
+      `"${tic.doc.period}"`,
+      `"${tic.doc.duration}"`,
+      `"${tic.doc.depth}"`,
+      `"${tic.doc.depthPercent}"`,
+      `"${tic.doc.rTranister}"`,
+      `"${tic.doc.rStar}"`,
+      `"${tic.doc.tmag}"`,
+      `"${tic.doc.deltaTmag}"`,
+      `"${tic.doc.dispositions['user:paper'] ? tic.doc.dispositions['user:paper'].disposition : ''}"`,
+      `"${tic.doc.dispositions['user:paper'] ? tic.doc.dispositions['user:paper'].comments : ''}"`,
+    ].join(',');
+    csv += newLine + '\n';
+  });
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename=planet-patrol-dispositions${all ? '-all' : ''}.csv`);
+  res.status(200);
+  res.send(csv);
+});
+
 async function getTicFiles(ticId: string) {
   let files = [] as any[];
   for await (let folder of folderList) {
@@ -346,11 +383,10 @@ async function getTicList() {
   return ticList;
 }
 
-
 async function updateFolderList() {
-  folderList = await recursiveGetSubfolders('1Z74BU-ijJy710QA3M9YwE_l1cE_dpSHA') as [];
-  console.log("Got folder list");
-};
+  folderList = (await recursiveGetSubfolders('1Z74BU-ijJy710QA3M9YwE_l1cE_dpSHA')) as [];
+  console.log('Got folder list');
+}
 
 updateFolderList();
 setInterval(updateFolderList, 60 * 60 * 1000 /* 60 minutes */);

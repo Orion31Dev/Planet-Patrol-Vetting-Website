@@ -111,8 +111,24 @@ a {
   &:not(.fail) .title {
     @include mini-title;
     float: left;
+    
+    margin-left: .1em;
 
-    max-width: 50%;
+    max-width: 49%;
+  }
+
+  .sep {
+    display: inline;
+    margin: 0 1vmin;
+    color: $light-gray;
+  }
+
+  .csv {
+    display: inline;
+    color: $gray;
+    &:hover {
+      color: $off-white;
+    }
   }
 
   &.fail {
@@ -223,7 +239,7 @@ a {
 
       font-weight: $font-thin;
 
-      margin-bottom: -.3em;
+      margin-bottom: -0.3em;
     }
 
     > .title {

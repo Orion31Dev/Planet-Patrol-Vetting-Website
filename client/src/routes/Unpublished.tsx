@@ -9,7 +9,7 @@ function Unpublished() {
   return (
     <div className="home">
       <Header />
-      <div className="title">All Dispositions</div>
+      <div className="title">Full Catalog</div>
       <Search inputUpdateCallback={setSearchVal} />
       <Table query={searchVal} />
     </div>
